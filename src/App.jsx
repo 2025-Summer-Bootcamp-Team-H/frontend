@@ -1,6 +1,6 @@
 import GlobalStyle from './styles/GlobalStyle'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Onboarding from './pages/Onboarding/Onboarding'
+import Onboarding from './pages/Onboarding'
 import Login from './pages/Login'
 
 function App() {
