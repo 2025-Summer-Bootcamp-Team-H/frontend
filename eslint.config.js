@@ -37,7 +37,6 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'prettier/prettier': 'error', // Prettier 위반시 ESLint 에러
     },
   },
 ]
