@@ -8,8 +8,8 @@ function App() {
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/Onboarding" element={<Onboarding />} />
-        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Onboarding />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   )
