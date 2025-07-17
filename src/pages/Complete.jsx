@@ -17,22 +17,44 @@ const Progress = styled.div`
   transition: width 0.3s;
 `
 
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  font-family: 'Public Sans';
+  margin: 0.5rem 0;
+`
+
+const Subtitle = styled.p`
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000;
+  font-family: 'Public Sans';
+`
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+`
 function Complete() {
-    return (
-        <div>
-            <Navbar />
-            <ProgressBarWrapper>
-            <Progress />
-            </ProgressBarWrapper>
-            <Container>
-                <h1>청구가 성공적으로 제출되었습니다</h1>
-                <p>자세한 내용은 청구서 메일로 발송되었습니다.</p>
-                <Bigbtn>
-                    확인
-                </Bigbtn>
-            </Container>
-        </div>
-    )
+  return (
+    <div>
+      <Navbar />
+      <ProgressBarWrapper>
+        <Progress />
+      </ProgressBarWrapper>
+      <Container>
+        <Title>청구가 성공적으로 제출되었습니다</Title>
+        <Subtitle>
+          자세한 사항은 확인 이메일을 통해 확인하실 수 있습니다.
+        </Subtitle>
+        <ButtonWrapper>
+          <Bigbtn>확인</Bigbtn>
+        </ButtonWrapper>
+      </Container>
+    </div>
+  )
 }
 
-export default Complete;
+export default Complete
