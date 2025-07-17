@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import logowhite from '../assets/Navbar/logowhite.png';
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -10,7 +11,8 @@ const PageWrapper = styled.div`
 
 // --- Section 1: Hero Section (Top Blue Gradient) ---
 const HeroSection = styled.section`
-  min-height: 100vh;
+  min-height: 100svh;
+  height: 100svh;
   background: linear-gradient(180deg, #3b82f6 0%, #1e3a8a 100%);
   display: flex;
   flex-direction: column;
@@ -19,7 +21,8 @@ const HeroSection = styled.section`
   color: white;
   text-align: center;
   position: relative;
-  padding-top: 80px;
+  padding: 0;
+  overflow: hidden;
 `
 
 const TopBar = styled.div`
@@ -40,68 +43,70 @@ const Logo = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: bold;
 `
 
-const LogoIcon = styled.div`
-  width: 24px;
-  height: 24px;
-  background-color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #3b82f6;
-  font-size: 0.8rem;
-  font-weight: bold;
+const LogoImg = styled.img`
+  height: 40px;
+  margin-right: 12px;
+  display: block;
 `
 
 const GetStartedButton = styled.button`
-  background: none;
-  border: 1px solid white;
-  color: white;
-  padding: 8px 16px;
+  background:none;
+  color: #fff;
+  border: none;
   border-radius: 20px;
+  padding: 8px 32px;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 0.9rem;
+  margin-left: 8px;
   transition:
-    background 0.3s,
-    color 0.3s;
-
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s;
   &:hover {
-    background: white;
-    color: #3b82f6;
+    background: #2563eb;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
+    transform: translateY(-0.5px) scale(1.01);
   }
 `
 
 const HeroTitle = styled.h1`
-  font-size: 4rem;
+  font-size: 7em;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin: 0 0 0.5em 0;
   letter-spacing: -2px;
+  color: #FFFFFF;
+  margin-top: -2em;
 `
 
 const HeroSubtitle = styled.p`
   font-size: 1.5rem;
-  margin-bottom: 3rem;
+  margin: 0;
   opacity: 0.9;
+  position: absolute;
+  left: 50%;
+  bottom: 6rem;
+  transform: translateX(-50%);
 `
 
 const ScrollIndicator = styled.div`
   position: absolute;
-  bottom: 2rem;
   left: 50%;
+  bottom: 2rem;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  z-index: 10;
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     animation: bounce 1.5s infinite;
   }
 
@@ -124,21 +129,26 @@ const ScrollIndicator = styled.div`
 
 // --- Section 2: Feature Highlights (White Background) ---
 const FeatureSection = styled.section`
-  padding: 80px 0;
+  min-height: 100svh;
+  padding: 0;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 80px;
-`
+  justify-content: center;
+  gap: 0;
+`;
 
 const FeatureBlock = styled.div`
   display: flex;
   align-items: center;
+  min-height: 100svh;
+  height: 100svh;
   max-width: 1200px;
   width: 90%;
   gap: 60px;
-  padding: 0 20px;
+  padding: 0 0;
+  justify-content: center;
 
   &:nth-child(odd) {
     flex-direction: row;
@@ -175,28 +185,38 @@ const FeatureTextContent = styled.div`
 `
 
 const FeatureHeadline = styled.h2`
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: bold;
   color: #3b82f6;
   line-height: 1.3;
-`
+  margin-bottom: 1.5rem;
+`;
 
 const FeatureDescription = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #4b5563;
   line-height: 1.6;
-`
+  margin-bottom: 2rem;
+`;
 
 // --- Section 3: Dashboard Preview (Dark Blue Background) ---
 const DashboardSection = styled.section`
-  padding: 80px 0;
+  min-height: 1024px;
+  height: 1024px;
+  max-width: 1440px;
+  width: 100vw;
+  margin: 0 auto;
   background-color: #1e3a8a;
   color: white;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 40px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 `
 
 const DashboardTitle = styled.h2`
@@ -209,12 +229,18 @@ const DashboardCardsContainer = styled.div`
   display: flex;
   gap: 30px;
   max-width: 1200px;
-  width: 90%;
+  width: 80vw;
   justify-content: center;
+  align-items: stretch;
+  height: 60vh;
 
+  @media (max-width: 1440px) {
+    width: 90vw;
+  }
   @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
+    height: auto;
   }
 `
 
@@ -224,16 +250,21 @@ const DashboardCard = styled.div`
   padding: 30px;
   flex: 1;
   min-width: 400px;
+  max-width: 500px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   color: #1f2937;
   text-align: left;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     min-width: unset;
     width: 90%;
+    height: auto;
   }
 `
 
@@ -421,13 +452,12 @@ function Onboarding() {
       <HeroSection>
         <TopBar>
           <Logo>
-            <LogoIcon>CB</LogoIcon>
-            ClaimBridge
+            <LogoImg src={logowhite} alt="ClaimBridge 로고" />
+            <span style={{ fontWeight: 'bold', fontSize: '2rem', color: '#fff', letterSpacing: '-1px', marginTop: '10px', cursor: 'default' }}>ClaimBridge</span>
           </Logo>
-          <GetStartedButton>Get Started</GetStartedButton>
+          <GetStartedButton>Start</GetStartedButton>
         </TopBar>
         <HeroTitle>Claim Bridge</HeroTitle>
-        <HeroSubtitle>보험금 산정 자동 서비스</HeroSubtitle>
         <ScrollIndicator>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -437,6 +467,7 @@ function Onboarding() {
             <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
           </svg>
         </ScrollIndicator>
+        <HeroSubtitle>보험금 산정 자동 서비스</HeroSubtitle>
       </HeroSection>
 
       {/* Feature Highlights Section */}
