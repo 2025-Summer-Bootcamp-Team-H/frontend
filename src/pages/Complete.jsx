@@ -2,6 +2,8 @@ import Navbar from '../components/Navbar'
 import Container from '../components/Container'
 import styled from 'styled-components'
 import Bigbtn from '../components/buttons/Bigbtn'
+import { useNavigate } from 'react-router-dom'
+
 const ProgressBarWrapper = styled.div`
   width: 100%;
   height: 10px;
@@ -38,6 +40,12 @@ const ButtonWrapper = styled.div`
   margin: 1rem 0;
 `
 function Complete() {
+  const navigate = useNavigate()
+
+  const handleNextClick = () => {
+    navigate('/')
+  }
+
   return (
     <div>
       <Navbar />
@@ -50,7 +58,7 @@ function Complete() {
           자세한 사항은 확인 이메일을 통해 확인하실 수 있습니다.
         </Subtitle>
         <ButtonWrapper>
-          <Bigbtn>확인</Bigbtn>
+          <Bigbtn onClick={handleNextClick}>확인</Bigbtn>
         </ButtonWrapper>
       </Container>
     </div>

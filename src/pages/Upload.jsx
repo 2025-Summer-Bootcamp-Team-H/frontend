@@ -2,6 +2,7 @@ import Container from '../components/Container'
 import Navbar from '../components/Navbar'
 import styled from 'styled-components'
 import BigBtn from '../components/buttons/Bigbtn'
+import { useNavigate } from 'react-router-dom'
 
 const Text = styled.p`
   font-size: 1rem;
@@ -86,6 +87,12 @@ const Progress = styled.div`
 `
 
 function Upload() {
+  const navigate = useNavigate()
+
+  const handleNextClick = () => {
+    navigate('/analysis')
+  }
+
   return (
     <div>
       <Navbar />
@@ -116,7 +123,7 @@ function Upload() {
             </Box>
           </div>
         </ContentWrapper>
-        <BigBtn>다음 단계로</BigBtn>
+        <BigBtn onClick={handleNextClick}>다음 단계로</BigBtn>
         <Text>
           업로드하면 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.
         </Text>

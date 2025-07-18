@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Container from '../components/Container'
 
@@ -180,14 +181,170 @@ const CustomContainer = styled(Container)`
   padding: 50px 80px;
 `
 
-function Report({ status = 'Passed' }) {
+function Report() {
+  const { id } = useParams()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  // 고객 데이터 (Management 페이지와 동일한 데이터)
+  const customerData = {
+    1: {
+      name: '이인호',
+      diagnosis: 'Type 2 Diabetes',
+      amount: '₩684,900',
+      date: '2024-07-26',
+      manager: '강현진',
+      status: 'Failed',
+      residentNumber: '931201-1234567',
+      insurance: 'Comprehensive Health (종합 건강)',
+      specialTerms:
+        'Pre-existing conditions covered after 12 months (기존 질환은 12개월 후 보장)',
+      calculatedAmount: '₩684,900',
+      annualRate: '+3%',
+    },
+    2: {
+      name: '박주현',
+      diagnosis: 'Hypertension',
+      amount: '₩684,750',
+      date: '2024-07-25',
+      manager: '정종착',
+      status: 'Passed',
+      residentNumber: '880315-2345678',
+      insurance: 'Premium Health Care (프리미엄 건강)',
+      specialTerms:
+        'No waiting period for chronic conditions (만성질환 대기기간 없음)',
+      calculatedAmount: '₩684,750',
+      annualRate: '+5%',
+    },
+    3: {
+      name: '김선경',
+      diagnosis: 'Asthma',
+      amount: '₩965,100',
+      date: '2024-07-24',
+      manager: '김합성',
+      status: 'Failed',
+      residentNumber: '920408-3456789',
+      insurance: 'Standard Health (표준 건강)',
+      specialTerms: 'Respiratory conditions covered (호흡기 질환 보장)',
+      calculatedAmount: '₩965,100',
+      annualRate: '+2%',
+    },
+    4: {
+      name: '최태연',
+      diagnosis: 'Chronic Back Pain',
+      amount: '₩347,000',
+      date: '2024-07-23',
+      manager: '최태연',
+      status: 'Passed',
+      residentNumber: '890712-4567890',
+      insurance: 'Basic Health (기본 건강)',
+      specialTerms: 'Orthopedic conditions covered (정형외과 질환 보장)',
+      calculatedAmount: '₩347,000',
+      annualRate: '+4%',
+    },
+    5: {
+      name: '김다현',
+      diagnosis: 'Migraine',
+      amount: '₩523,400',
+      date: '2024-07-22',
+      manager: '이미영',
+      status: 'Passed',
+      residentNumber: '910325-5678901',
+      insurance: 'Comprehensive Health (종합 건강)',
+      specialTerms: 'Neurological conditions covered (신경과 질환 보장)',
+      calculatedAmount: '₩523,400',
+      annualRate: '+6%',
+    },
+    6: {
+      name: '정민수',
+      diagnosis: 'Osteoarthritis',
+      amount: '₩892,300',
+      date: '2024-07-21',
+      manager: '박준호',
+      status: 'Failed',
+      residentNumber: '870619-6789012',
+      insurance: 'Premium Health Care (프리미엄 건강)',
+      specialTerms: 'Joint conditions covered (관절 질환 보장)',
+      calculatedAmount: '₩892,300',
+      annualRate: '+3%',
+    },
+    7: {
+      name: '윤서연',
+      diagnosis: 'Depression',
+      amount: '₩456,800',
+      date: '2024-07-20',
+      manager: '김지영',
+      status: 'Passed',
+      residentNumber: '930827-7890123',
+      insurance: 'Mental Health Plus (정신건강 플러스)',
+      specialTerms: 'Mental health conditions covered (정신건강 질환 보장)',
+      calculatedAmount: '₩456,800',
+      annualRate: '+7%',
+    },
+    8: {
+      name: '송현우',
+      diagnosis: 'Sleep Apnea',
+      amount: '₩1,234,500',
+      date: '2024-07-19',
+      manager: '최동현',
+      status: 'Failed',
+      residentNumber: '881104-8901234',
+      insurance: 'Comprehensive Health (종합 건강)',
+      specialTerms: 'Sleep disorders covered (수면장애 보장)',
+      calculatedAmount: '₩1,234,500',
+      annualRate: '+4%',
+    },
+    9: {
+      name: '임지은',
+      diagnosis: 'Fibromyalgia',
+      amount: '₩678,900',
+      date: '2024-07-18',
+      manager: '이수진',
+      status: 'Passed',
+      residentNumber: '900213-9012345',
+      insurance: 'Chronic Condition Care (만성질환 케어)',
+      specialTerms: 'Chronic pain conditions covered (만성통증 질환 보장)',
+      calculatedAmount: '₩678,900',
+      annualRate: '+5%',
+    },
+    10: {
+      name: '한준호',
+      diagnosis: 'Anxiety Disorder',
+      amount: '₩345,600',
+      date: '2024-07-17',
+      manager: '박민수',
+      status: 'Failed',
+      residentNumber: '940506-0123456',
+      insurance: 'Mental Health Plus (정신건강 플러스)',
+      specialTerms: 'Anxiety disorders covered (불안장애 보장)',
+      calculatedAmount: '₩345,600',
+      annualRate: '+6%',
+    },
+  }
+
+  // 현재 고객 정보 가져오기 (id를 숫자로 변환)
+  const customerId = parseInt(id) || 1
+  const currentCustomer = customerData[customerId] || customerData[1]
+
+  console.log(
+    'Report ID:',
+    id,
+    'Customer ID:',
+    customerId,
+    'Customer:',
+    currentCustomer,
+  )
+
   return (
     <div>
       <Navbar type="user-logged-in" />
       <CustomContainer>
         <HeaderContainer>
-          <BackButton></BackButton>
-          <Title>강현진님의 심사 결과</Title>
+          <BackButton onClick={() => navigate(-1)}></BackButton>
+          <Title>{currentCustomer.name}님의 심사 결과</Title>
         </HeaderContainer>
 
         <Section>
@@ -195,15 +352,23 @@ function Report({ status = 'Passed' }) {
           <InfoList>
             <InfoItem>
               <InfoLabel>이름</InfoLabel>
-              <InfoValue>강현진</InfoValue>
+              <InfoValue>{currentCustomer.name}</InfoValue>
             </InfoItem>
             <InfoItem>
               <InfoLabel>주민번호</InfoLabel>
-              <InfoValue>931201-1234567</InfoValue>
+              <InfoValue>{currentCustomer.residentNumber}</InfoValue>
             </InfoItem>
             <InfoItem>
               <InfoLabel>신청일자</InfoLabel>
-              <InfoValue>2017년 7월 10일</InfoValue>
+              <InfoValue>{currentCustomer.date}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>진단명</InfoLabel>
+              <InfoValue>{currentCustomer.diagnosis}</InfoValue>
+            </InfoItem>
+            <InfoItem>
+              <InfoLabel>담당자</InfoLabel>
+              <InfoValue>{currentCustomer.manager}</InfoValue>
             </InfoItem>
           </InfoList>
         </Section>
@@ -211,11 +376,11 @@ function Report({ status = 'Passed' }) {
         <Section>
           <SectionTitle>심사 통과 여부</SectionTitle>
           <StatusContainer>
-            <StatusIcon status={status}>
-              {status === 'Passed' ? '✓' : 'X'}
+            <StatusIcon status={currentCustomer.status}>
+              {currentCustomer.status === 'Passed' ? '✓' : 'X'}
             </StatusIcon>
-            <StatusText status={status}>
-              {status === 'Passed' ? 'Passed' : 'Failed'}
+            <StatusText status={currentCustomer.status}>
+              {currentCustomer.status === 'Passed' ? 'Passed' : 'Failed'}
             </StatusText>
           </StatusContainer>
         </Section>
@@ -225,14 +390,11 @@ function Report({ status = 'Passed' }) {
           <InfoList>
             <InfoItem>
               <InfoLabel>가입 보험</InfoLabel>
-              <InfoValue>Comprehensive Health (종합 건강)</InfoValue>
+              <InfoValue>{currentCustomer.insurance}</InfoValue>
             </InfoItem>
             <InfoItem>
               <InfoLabel>특약 내용</InfoLabel>
-              <InfoValue>
-                Pre-existing conditions covered after 12 months (기존 질환은
-                12개월 후 보장)
-              </InfoValue>
+              <InfoValue>{currentCustomer.specialTerms}</InfoValue>
             </InfoItem>
           </InfoList>
         </Section>
@@ -240,7 +402,7 @@ function Report({ status = 'Passed' }) {
         <Section>
           <SectionTitle>보험금 산정 금액</SectionTitle>
           <AmountBox>
-            <AmountValue>₩861,500</AmountValue>
+            <AmountValue>{currentCustomer.calculatedAmount}</AmountValue>
           </AmountBox>
         </Section>
 
@@ -248,8 +410,8 @@ function Report({ status = 'Passed' }) {
           <SectionTitle>보험료 변화 추세</SectionTitle>
           <TrendContainer>
             <TrendInfo>
-              <TrendAmount>₩861,500</TrendAmount>
-              <TrendRate>Annual +5%</TrendRate>
+              <TrendAmount>{currentCustomer.calculatedAmount}</TrendAmount>
+              <TrendRate>Annual {currentCustomer.annualRate}</TrendRate>
             </TrendInfo>
           </TrendContainer>
           <GraphContainer>
@@ -287,8 +449,6 @@ function Report({ status = 'Passed' }) {
   )
 }
 
-Report.propTypes = {
-  status: PropTypes.oneOf(['Passed', 'Failed']),
-}
+Report.propTypes = {}
 
 export default Report
