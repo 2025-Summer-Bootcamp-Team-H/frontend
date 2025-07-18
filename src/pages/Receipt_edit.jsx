@@ -1,7 +1,8 @@
-import Navbar from '../components/Navbar';
-import Container from '../components/Container';
-import styled from 'styled-components';
-import SmallButton from '../components/buttons/Smallbtn';
+import Navbar from '../components/Navbar'
+import Container from '../components/Container'
+import styled from 'styled-components'
+import SmallButton from '../components/buttons/Smallbtn'
+import { useNavigate } from 'react-router-dom'
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
@@ -9,20 +10,20 @@ const ProgressBarWrapper = styled.div`
   background: #f2f4f6;
   overflow: hidden;
   margin-bottom: 2.5vh;
-`;
+`
 
 const Progress = styled.div`
   width: 80%;
   height: 100%;
   background: #3182f6;
   transition: width 0.3s;
-`;
+`
 const SubTitle = styled.h2`
   font-size: 1.3vw;
   font-weight: bold;
   font-family: 'Public Sans';
   margin-bottom: 1.5vh;
-`;
+`
 const ImageBox = styled.div`
   width: 25vw;
   height: 40vh;
@@ -34,7 +35,7 @@ const ImageBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 const TextAreaBox = styled.textarea`
   width: 28vw;
@@ -50,71 +51,83 @@ const TextAreaBox = styled.textarea`
   outline: none;
   box-sizing: border-box;
   overflow: auto;
-`;
+`
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-`;
+`
 const CustomContainer = styled(Container)`
   margin: 2vh auto;
   margin-top: 7vh;
-`;
+`
 
 const StyledPrevButton = styled(SmallButton)`
-  background: #F0F2F5 !important;
+  background: #f0f2f5 !important;
   color: #333 !important;
   font-weight: bold !important;
-`;
+`
 
-const image1 = 'https://via.placeholder.com/350x260?text=영수증';
+const image1 = 'https://via.placeholder.com/350x260?text=영수증'
 
-function receipt_edit() {
-    return (
-        <div>
-            <Navbar />
-            <ProgressBarWrapper>
-                <Progress />
-            </ProgressBarWrapper>
-            <CustomContainer>
-                <ContentWrapper>
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            gap: '3rem',
-                            alignItems: 'flex-start',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <div>
-                            <SubTitle>병원 영수증</SubTitle>
-                            <ImageBox>
-                                <img src={image1} alt="병원 영수증" />
-                            </ImageBox>
-                        </div>
-                        <div>
-                            <SubTitle>내용 수정하기</SubTitle>
-                            <TextAreaBox placeholder="여기에 내용을 입력하세요" />
-                        </div>
-                    </div>
-                </ContentWrapper>
-            </CustomContainer>
-            <div
-                style={{
-                    width: '80vw',
-                    margin: '10px auto',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    gap: '10px',
-                }}
-            >
-                <StyledPrevButton>이전단계로</StyledPrevButton>
-                <SmallButton>청구하기</SmallButton>
+function Receipt_edit() {
+  const navigate = useNavigate()
+
+  const handleNextClick = () => {
+    navigate('/complete')
+  }
+
+  const handlePrevClick = () => {
+    navigate('/diagnosis_edit')
+  }
+
+  return (
+    <div>
+      <Navbar />
+      <ProgressBarWrapper>
+        <Progress />
+      </ProgressBarWrapper>
+      <CustomContainer>
+        <ContentWrapper>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              gap: '3rem',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+            }}
+          >
+            <div>
+              <SubTitle>병원 영수증</SubTitle>
+              <ImageBox>
+                <img src={image1} alt="병원 영수증" />
+              </ImageBox>
             </div>
-        </div>
-    );
+            <div>
+              <SubTitle>내용 수정하기</SubTitle>
+              <TextAreaBox placeholder="여기에 내용을 입력하세요" />
+            </div>
+          </div>
+        </ContentWrapper>
+      </CustomContainer>
+      <div
+        style={{
+          width: '80vw',
+          margin: '10px auto',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: '10px',
+        }}
+      >
+        <StyledPrevButton onClick={handlePrevClick}>
+          이전단계로
+        </StyledPrevButton>
+        <SmallButton onClick={handleNextClick}>청구하기</SmallButton>
+      </div>
+    </div>
+  )
 }
 
-export default receipt_edit;
+export default Receipt_edit

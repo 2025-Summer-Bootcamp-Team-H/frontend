@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import logowhite from '../assets/Navbar/logowhite.png';
+import { useNavigate } from 'react-router-dom'
+import logowhite from '../assets/Navbar/logowhite.png'
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -54,7 +55,7 @@ const LogoImg = styled.img`
 `
 
 const GetStartedButton = styled.button`
-  background:none;
+  background: none;
   color: #fff;
   border: none;
   border-radius: 20px;
@@ -78,7 +79,7 @@ const HeroTitle = styled.h1`
   font-weight: bold;
   margin: 0 0 0.5em 0;
   letter-spacing: -2px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: -2em;
 `
 
@@ -137,7 +138,7 @@ const FeatureSection = styled.section`
   align-items: center;
   justify-content: center;
   gap: 0;
-`;
+`
 
 const FeatureBlock = styled.div`
   display: flex;
@@ -190,14 +191,14 @@ const FeatureHeadline = styled.h2`
   color: #3b82f6;
   line-height: 1.3;
   margin-bottom: 1.5rem;
-`;
+`
 
 const FeatureDescription = styled.p`
   font-size: 1.5rem;
   color: #4b5563;
   line-height: 1.6;
   margin-bottom: 2rem;
-`;
+`
 
 // --- Section 3: Dashboard Preview (Dark Blue Background) ---
 const DashboardSection = styled.section`
@@ -446,6 +447,22 @@ const SelectionCardDescription = styled.p`
 `
 
 function Onboarding() {
+  const navigate = useNavigate()
+
+  const handleGetStartedClick = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
+
+  const handleScroll = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
+
   return (
     <PageWrapper>
       {/* Hero Section */}
@@ -453,12 +470,25 @@ function Onboarding() {
         <TopBar>
           <Logo>
             <LogoImg src={logowhite} alt="ClaimBridge 로고" />
-            <span style={{ fontWeight: 'bold', fontSize: '2rem', color: '#fff', letterSpacing: '-1px', marginTop: '10px', cursor: 'default' }}>ClaimBridge</span>
+            <span
+              style={{
+                fontWeight: 'bold',
+                fontSize: '2rem',
+                color: '#fff',
+                letterSpacing: '-1px',
+                marginTop: '10px',
+                cursor: 'default',
+              }}
+            >
+              ClaimBridge
+            </span>
           </Logo>
-          <GetStartedButton>Start</GetStartedButton>
+          <GetStartedButton onClick={handleGetStartedClick}>
+            Start
+          </GetStartedButton>
         </TopBar>
         <HeroTitle>Claim Bridge</HeroTitle>
-        <ScrollIndicator>
+        <ScrollIndicator onClick={handleScroll}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -600,7 +630,7 @@ function Onboarding() {
       <SelectionSection>
         <SelectionTitle>사용하실 서비스를 선택해주세요</SelectionTitle>
         <SelectionCardsContainer>
-          <SelectionCard>
+          <SelectionCard onClick={() => navigate('/upload')}>
             <SelectionIcon>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -617,14 +647,14 @@ function Onboarding() {
               보험금 청구
             </SelectionCardDescription>
           </SelectionCard>
-          <SelectionCard>
+          <SelectionCard onClick={() => navigate('/login')}>
             <SelectionIcon>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="white"
               >
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
               </svg>
             </SelectionIcon>
             <SelectionCardTitle>보험사 직원</SelectionCardTitle>

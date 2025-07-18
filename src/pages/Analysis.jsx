@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar'
 import Container from '../components/Container'
 import styled from 'styled-components'
 import SmallButton from '../components/buttons/Smallbtn'
+import { useNavigate } from 'react-router-dom'
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
@@ -62,6 +63,12 @@ const OverlayIcon = styled.img`
 const image1 = './assets/Analysis/Test.png'
 
 function Analysis() {
+  const navigate = useNavigate()
+
+  const handleNextClick = () => {
+    navigate('/diagnosis_edit')
+  }
+
   return (
     <div>
       <Navbar />
@@ -105,7 +112,7 @@ function Analysis() {
           justifyContent: 'flex-end',
         }}
       >
-        <SmallButton>다음 단계로</SmallButton>
+        <SmallButton onClick={handleNextClick}>다음 단계로</SmallButton>
       </div>
     </div>
   )

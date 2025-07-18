@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar'
 import Container from '../components/Container'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 
 const Header = styled.div`
   margin-bottom: 2rem;
@@ -174,6 +175,7 @@ const CustomContainer = styled(Container)`
 function Management() {
   const mockData = [
     {
+      id: 1,
       name: '이인호',
       diagnosis: 'Type 2 Diabetes',
       amount: '₩684,900',
@@ -183,6 +185,7 @@ function Management() {
       checked: true,
     },
     {
+      id: 2,
       name: '박주현',
       diagnosis: 'Hypertension',
       amount: '₩684,750',
@@ -192,6 +195,7 @@ function Management() {
       checked: true,
     },
     {
+      id: 3,
       name: '김선경',
       diagnosis: 'Asthma',
       amount: '₩965,100',
@@ -201,6 +205,7 @@ function Management() {
       checked: false,
     },
     {
+      id: 4,
       name: '최태연',
       diagnosis: 'Chronic Back Pain',
       amount: '₩347,000',
@@ -210,6 +215,7 @@ function Management() {
       checked: false,
     },
     {
+      id: 5,
       name: '김다현',
       diagnosis: 'Migraine',
       amount: '₩523,400',
@@ -219,6 +225,7 @@ function Management() {
       checked: true,
     },
     {
+      id: 6,
       name: '정민수',
       diagnosis: 'Osteoarthritis',
       amount: '₩892,300',
@@ -228,6 +235,7 @@ function Management() {
       checked: false,
     },
     {
+      id: 7,
       name: '윤서연',
       diagnosis: 'Depression',
       amount: '₩456,800',
@@ -237,6 +245,7 @@ function Management() {
       checked: true,
     },
     {
+      id: 8,
       name: '송현우',
       diagnosis: 'Sleep Apnea',
       amount: '₩1,234,500',
@@ -246,6 +255,7 @@ function Management() {
       checked: false,
     },
     {
+      id: 9,
       name: '임지은',
       diagnosis: 'Fibromyalgia',
       amount: '₩678,900',
@@ -255,6 +265,7 @@ function Management() {
       checked: true,
     },
     {
+      id: 10,
       name: '한준호',
       diagnosis: 'Anxiety Disorder',
       amount: '₩345,600',
@@ -264,6 +275,8 @@ function Management() {
       checked: false,
     },
   ]
+
+  const navigate = useNavigate()
 
   return (
     <div>
@@ -304,7 +317,10 @@ function Management() {
           </thead>
           <tbody>
             {mockData.map((row, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                onClick={() => navigate(`/report/${row.id}`)}
+              >
                 <Td>{row.name}</Td>
                 <Td>{row.diagnosis}</Td>
                 <Td>{row.amount}</Td>
