@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import axios from 'axios';
 import Navbar from '../components/Navbar'
 import Container from '../components/Container'
 import Bigbtn from '../components/buttons/Bigbtn'
@@ -50,32 +52,53 @@ const StyledBigbtn = styled(Bigbtn)`
 `
 
 function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleNextClick = () => {
-    navigate('/management')
-  }
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/v1/users/login', {
+        email,
+        password,
+      });
+      localStorage.setItem('access_token', response.data.access_token);
+      navigate('/management');
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setError('아이디 또는 비밀번호가 올바르지 않습니다.');
+      } else {
+        setError('로그인 중 오류가 발생했습니다.');
+      }
+    }
+  };
 
   return (
     <>
-      <Navbar type="user-logged-out" />
+      <Navbar type="default" />
       <Container>
         <Wrapper>
           <FlexBox>
             <Title>로그인</Title>
-            <TextInput label="아이디" placeholder="example@email.com" />
+            <TextInput label="아이디" placeholder="example@email.com" value={email} onChange={e => setEmail(e.target.value)} />
             <TextInput
               label="비밀번호"
               placeholder="password"
               type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
-            <StyledTextButton href="/signup">회원가입하기</StyledTextButton>
-            <StyledBigbtn onClick={handleNextClick}>로그인</StyledBigbtn>
+            {error && <div style={{ color: 'red' }}>{error}</div>}
+            <StyledTextButton as="button" type="button" onClick={() => navigate('/signup')}>
+              회원가입하기
+            </StyledTextButton>
+            <StyledBigbtn onClick={handleLogin}>로그인</StyledBigbtn>
           </FlexBox>
         </Wrapper>
       </Container>
     </>
-  )
+  );
 }
 
 export default Login

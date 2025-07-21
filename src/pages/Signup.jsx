@@ -53,7 +53,7 @@ const StyledBigbtn = styled(Bigbtn)`
 function Signup() {
     return (
         <>
-            <Navbar type="user-logged-out" />
+            <Navbar type="default" />
             <Container>
                 <FlexBox>
                     <Title>회원가입</Title>
