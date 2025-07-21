@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import logo from '../assets/Navbar/logo.png'
 import PropTypes from 'prop-types'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const HeaderWrapper = styled.header`
   width: 100%;
@@ -77,20 +79,38 @@ const StartButton = styled.button`
 `
 
 function Navbar({ type = 'default' }) {
-  let menuItems = [<NavButton key="home">Home</NavButton>]
+  const navigate = useNavigate();
+
+  let menuItems = [];
+  if (type === 'default') {
+    menuItems = [
+      <NavButton key="home" onClick={() => navigate('/onboarding')}>Home</NavButton>
+    ];
+  }
 
   if (type === 'user-logged-out') {
     menuItems = [
-      <NavButton key="home">Home</NavButton>,
-      <NavButton key="signup">Sign up</NavButton>,
-      <NavButton key="login">Login</NavButton>,
+      <NavButton key="home" onClick={() => navigate('/onboarding')}>Home</NavButton>,
+      <NavButton key="signup" onClick={() => navigate('/signup')}>Sign up</NavButton>,
+      <NavButton key="login" onClick={() => navigate('/login')}>Login</NavButton>,
     ]
   } else if (type === 'user-logged-in') {
     menuItems = [
-      <NavButton key="home">Home</NavButton>,
-      <NavButton key="management">Management</NavButton>,
-      <NavButton key="logout">Logout</NavButton>,
-    ]
+      <NavButton key="management" onClick={() => navigate('/management')}>Management</NavButton>,
+      <NavButton key="logout" onClick={async () => {
+        try {
+          await axios.post('http://localhost:8000/api/v1/auth/logout', {}, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+            },
+          });
+        } catch {
+          // 로그아웃 API 호출 실패 시 무시 (예: 이미 만료된 토큰 등)
+        }
+        localStorage.removeItem('access_token');
+        navigate('/onboarding');
+      }}>Logout</NavButton>,
+    ];
   }
 
   return (
@@ -101,7 +121,7 @@ function Navbar({ type = 'default' }) {
       </LogoBox>
       <Nav>
         {menuItems}
-        <StartButton>Start</StartButton>
+        {type === 'user-logged-out' && <StartButton>Start</StartButton>}
       </Nav>
     </HeaderWrapper>
   )
