@@ -2,6 +2,9 @@ import Navbar from '../components/Navbar'
 import Container from '../components/Container'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useClaims } from '../hooks/useAPI'
+import { claimsAPI } from '../services'
 
 const Header = styled.div`
   margin-bottom: 2rem;
@@ -28,19 +31,22 @@ const SearchSection = styled.div`
   gap: 1rem;
   margin-bottom: 1rem;
   width: 100%;
+  box-sizing: border-box;
 `
 
 const SearchBar = styled.div`
   position: relative;
-  width: 95%;
+  width: 100%;
 `
 
 const SearchInput = styled.input`
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.5rem;
+  padding-right: 4rem;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   font-size: 0.875rem;
+  box-sizing: border-box;
 
   &::placeholder {
     color: #9ca3af;
@@ -53,6 +59,32 @@ const SearchIcon = styled.span`
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
+`
+
+const SearchButton = styled.button`
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem 1rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #2563eb;
+  }
+
+  &:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
 `
 
 const FilterSection = styled.div`
@@ -72,13 +104,14 @@ const FilterButton = styled.button`
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 1rem;
-  background: #dcebff;
+  background: ${(props) => (props.$active ? '#3b82f6' : '#dcebff')};
+  color: ${(props) => (props.$active ? 'white' : '#374151')};
   font-size: 0.875rem;
-  color: #374151;
   cursor: pointer;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #c5d9f0;
+    background: ${(props) => (props.$active ? '#2563eb' : '#c5d9f0')};
   }
 `
 
@@ -86,20 +119,26 @@ const DeleteButton = styled.button`
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 1rem;
-  background: #dcebff;
+  background: ${(props) => (props.disabled ? '#f3f4f6' : '#dcebff')};
   font-size: 0.875rem;
-  color: #374151;
-  cursor: pointer;
+  color: ${(props) => (props.disabled ? '#9ca3af' : '#374151')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  transition: all 0.2s ease;
 
   &:hover {
-    background: #c5d9f0;
+    background: ${(props) => (props.disabled ? '#f3f4f6' : '#c5d9f0')};
   }
+`
+
+const TableContainer = styled.div`
+  width: 100%;
+  padding: 0;
+  margin-bottom: 2rem;
 `
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 2rem;
 `
 
 const Th = styled.th`
@@ -135,8 +174,8 @@ const StatusBadge = styled.span`
   width: 50px;
   text-align: center;
   display: inline-block;
-  background: ${(props) => (props.status === 'Passed' ? '#dbeafe' : '#fee2e2')};
-  color: ${(props) => (props.status === 'Passed' ? '#1e40af' : '#dc2626')};
+  background: ${(props) => (props.status === 'passed' ? '#DCEBFF' : '#FFDCDC')};
+  color: #000000;
 `
 
 const Checkbox = styled.input`
@@ -155,12 +194,24 @@ const Pagination = styled.div`
 
 const PageButton = styled.button`
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  background: ${(props) => (props.active ? '#3b82f6' : 'white')};
-  color: ${(props) => (props.active ? 'white' : '#374151')};
-  border-radius: 0.375rem;
-  cursor: pointer;
+  border: none;
+  background: ${(props) => (props.$active ? '#e6f3ff' : 'transparent')};
+  color: #374151;
+  border-radius: ${(props) => (props.$active ? '50%' : '0')};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   font-size: 0.875rem;
+  font-weight: 600;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  min-width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${(props) => (props.$active ? '#d1e7ff' : '#f3f4f6')};
+  }
 `
 
 const CustomContainer = styled(Container)`
@@ -173,110 +224,203 @@ const CustomContainer = styled(Container)`
 `
 
 function Management() {
-  const mockData = [
-    {
-      id: 1,
-      name: '이인호',
-      diagnosis: 'Type 2 Diabetes',
-      amount: '₩684,900',
-      date: '2024-07-26',
-      manager: '강현진',
-      status: 'Failed',
-      checked: true,
-    },
-    {
-      id: 2,
-      name: '박주현',
-      diagnosis: 'Hypertension',
-      amount: '₩684,750',
-      date: '2024-07-25',
-      manager: '정종착',
-      status: 'Passed',
-      checked: true,
-    },
-    {
-      id: 3,
-      name: '김선경',
-      diagnosis: 'Asthma',
-      amount: '₩965,100',
-      date: '2024-07-24',
-      manager: '김합성',
-      status: 'Failed',
-      checked: false,
-    },
-    {
-      id: 4,
-      name: '최태연',
-      diagnosis: 'Chronic Back Pain',
-      amount: '₩347,000',
-      date: '2024-07-23',
-      manager: '최태연',
-      status: 'Passed',
-      checked: false,
-    },
-    {
-      id: 5,
-      name: '김다현',
-      diagnosis: 'Migraine',
-      amount: '₩523,400',
-      date: '2024-07-22',
-      manager: '이미영',
-      status: 'Passed',
-      checked: true,
-    },
-    {
-      id: 6,
-      name: '정민수',
-      diagnosis: 'Osteoarthritis',
-      amount: '₩892,300',
-      date: '2024-07-21',
-      manager: '박준호',
-      status: 'Failed',
-      checked: false,
-    },
-    {
-      id: 7,
-      name: '윤서연',
-      diagnosis: 'Depression',
-      amount: '₩456,800',
-      date: '2024-07-20',
-      manager: '김지영',
-      status: 'Passed',
-      checked: true,
-    },
-    {
-      id: 8,
-      name: '송현우',
-      diagnosis: 'Sleep Apnea',
-      amount: '₩1,234,500',
-      date: '2024-07-19',
-      manager: '최동현',
-      status: 'Failed',
-      checked: false,
-    },
-    {
-      id: 9,
-      name: '임지은',
-      diagnosis: 'Fibromyalgia',
-      amount: '₩678,900',
-      date: '2024-07-18',
-      manager: '이수진',
-      status: 'Passed',
-      checked: true,
-    },
-    {
-      id: 10,
-      name: '한준호',
-      diagnosis: 'Anxiety Disorder',
-      amount: '₩345,600',
-      date: '2024-07-17',
-      manager: '박민수',
-      status: 'Failed',
-      checked: false,
-    },
-  ]
+  const [currentPage, setCurrentPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('') // 정렬 기준
+  const [sortOrder, setSortOrder] = useState('desc') // 정렬 순서
+  const [selectedClaims, setSelectedClaims] = useState([]) // 선택된 청구 ID들
+  const [isDeleting, setIsDeleting] = useState(false) // 삭제 진행 중 상태
+  const [selectAll, setSelectAll] = useState(false) // 전체 선택 상태
+
+  const { claims, loading, error, totalPages, executeSearch, clearSearch } =
+    useClaims(currentPage, 10, sortBy, sortOrder)
 
   const navigate = useNavigate()
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+    setSelectAll(false) // 페이지 변경 시 전체 선택 상태 초기화
+    setSelectedClaims([]) // 페이지 변경 시 선택된 항목들 초기화
+  }
+
+  // 검색어 변경 핸들러
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+  }
+
+  // 검색 실행 핸들러
+  const handleSearchSubmit = () => {
+    if (searchTerm.trim()) {
+      executeSearch(searchTerm)
+    } else {
+      clearSearch()
+    }
+    setCurrentPage(1) // 검색 시 1페이지로 이동
+    setSelectAll(false) // 검색 시 전체 선택 상태 초기화
+    setSelectedClaims([]) // 검색 시 선택된 항목들 초기화
+  }
+
+  // 엔터키 검색 핸들러
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit()
+    }
+  }
+
+  // 정렬 핸들러
+  const handleSort = (sortType) => {
+    if (sortBy === sortType) {
+      // 같은 정렬 기준을 다시 클릭하면 순서 변경
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      // 새로운 정렬 기준
+      setSortBy(sortType)
+      setSortOrder('desc') // 기본값은 내림차순
+    }
+    setCurrentPage(1) // 정렬 변경 시 1페이지로 이동
+  }
+
+  // 정렬 버튼 활성화 상태 확인
+  const isSortActive = (sortType) => {
+    return sortBy === sortType
+  }
+
+  // 체크박스 핸들러
+  const handleCheckboxChange = (claimId) => {
+    setSelectedClaims((prev) => {
+      const newSelected = prev.includes(claimId)
+        ? prev.filter((id) => id !== claimId)
+        : [...prev, claimId]
+
+      // 현재 페이지의 모든 항목이 선택되었는지 확인
+      const currentPageClaimIds = displayData.map((row) => row.claim_id)
+      const allSelected = currentPageClaimIds.every((id) =>
+        newSelected.includes(id),
+      )
+      setSelectAll(allSelected)
+
+      return newSelected
+    })
+  }
+
+  // 전체 선택 핸들러
+  const handleSelectAll = () => {
+    if (selectAll) {
+      // 전체 선택 해제
+      setSelectedClaims([])
+      setSelectAll(false)
+    } else {
+      // 전체 선택
+      const currentPageClaimIds = displayData.map((row) => row.claim_id)
+      setSelectedClaims(currentPageClaimIds)
+      setSelectAll(true)
+    }
+  }
+
+  // 삭제 핸들러
+  const handleDelete = async () => {
+    if (selectedClaims.length === 0) {
+      alert('삭제할 항목을 선택해주세요.')
+      return
+    }
+
+    if (
+      !confirm(`선택한 ${selectedClaims.length}개 항목을 삭제하시겠습니까?`)
+    ) {
+      return
+    }
+
+    setIsDeleting(true)
+    try {
+      // 선택된 모든 항목을 순차적으로 삭제
+      const deletePromises = selectedClaims.map((claimId) =>
+        claimsAPI.delete(claimId),
+      )
+
+      await Promise.all(deletePromises)
+
+      // 삭제 성공 후 상태 초기화
+      setSelectedClaims([])
+      alert('선택한 항목이 삭제되었습니다.')
+
+      // 데이터 새로고침
+      window.location.reload()
+    } catch (error) {
+      console.error('삭제 실패:', error)
+      alert('삭제 중 오류가 발생했습니다.')
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  // 페이지네이션 버튼 생성 함수
+  const generatePageButtons = () => {
+    const buttons = []
+    const maxButtons = 5
+    const totalPagesNum = totalPages || 1
+
+    if (totalPagesNum <= maxButtons) {
+      // 전체 페이지가 5개 이하면 모든 페이지 표시
+      for (let i = 1; i <= totalPagesNum; i++) {
+        buttons.push(
+          <PageButton
+            key={i}
+            $active={i === currentPage}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </PageButton>,
+        )
+      }
+    } else {
+      // 전체 페이지가 5개 초과면 현재 페이지 기준으로 5개씩 표시
+      const currentGroup = Math.ceil(currentPage / maxButtons)
+      const startPage = (currentGroup - 1) * maxButtons + 1
+      const endPage = Math.min(startPage + maxButtons - 1, totalPagesNum)
+
+      for (let i = startPage; i <= endPage; i++) {
+        buttons.push(
+          <PageButton
+            key={i}
+            $active={i === currentPage}
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </PageButton>,
+        )
+      }
+    }
+
+    return buttons
+  }
+
+  // 로딩 상태 표시
+  if (loading) {
+    return (
+      <div>
+        <Navbar type="user-logged-in" />
+        <CustomContainer />
+      </div>
+    )
+  }
+
+  // 에러 상태 표시
+  if (error) {
+    return (
+      <div>
+        <Navbar type="user-logged-in" />
+        <CustomContainer>
+          <div style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>
+            오류가 발생했습니다: {error}
+          </div>
+        </CustomContainer>
+      </div>
+    )
+  }
+
+  // API 데이터만 사용 (검색 결과가 없으면 빈 배열)
+  const displayData = claims || []
 
   return (
     <div>
@@ -290,63 +434,117 @@ function Management() {
         <SearchSection>
           <SearchBar>
             <SearchIcon>🔍</SearchIcon>
-            <SearchInput placeholder="고객 이름 또는 고객 주민번호로 검색" />
+            <SearchInput
+              placeholder="고객 이름 또는 고객 주민번호로 검색"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyPress={handleSearchKeyPress}
+            />
+            <SearchButton onClick={handleSearchSubmit}>검색</SearchButton>
           </SearchBar>
 
           <FilterSection>
             <FilterGroup>
-              <FilterButton>시간별</FilterButton>
-              <FilterButton>상태별</FilterButton>
-              <FilterButton>금액별</FilterButton>
+              <FilterButton
+                $active={isSortActive('time')}
+                onClick={() => handleSort('time')}
+              >
+                시간별{' '}
+                {isSortActive('time') && (sortOrder === 'desc' ? '↓' : '↑')}
+              </FilterButton>
+              <FilterButton
+                $active={isSortActive('status')}
+                onClick={() => handleSort('status')}
+              >
+                상태별{' '}
+                {isSortActive('status') && (sortOrder === 'desc' ? '↓' : '↑')}
+              </FilterButton>
+              <FilterButton
+                $active={isSortActive('amount')}
+                onClick={() => handleSort('amount')}
+              >
+                금액별{' '}
+                {isSortActive('amount') && (sortOrder === 'desc' ? '↓' : '↑')}
+              </FilterButton>
             </FilterGroup>
-            <DeleteButton>삭제하기</DeleteButton>
+            <DeleteButton
+              onClick={handleDelete}
+              disabled={selectedClaims.length === 0 || isDeleting}
+            >
+              {isDeleting
+                ? '삭제 중...'
+                : `삭제하기 (${selectedClaims.length})`}
+            </DeleteButton>
           </FilterSection>
         </SearchSection>
 
-        <Table>
-          <thead>
-            <tr>
-              <Th>이름</Th>
-              <Th>진단명</Th>
-              <Th>총 금액</Th>
-              <Th>신청 일자</Th>
-              <Th>담당자</Th>
-              <Th>상태</Th>
-              <Th>삭제</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockData.map((row, index) => (
-              <TableRow
-                key={index}
-                onClick={() => navigate(`/report/${row.id}`)}
-              >
-                <Td>{row.name}</Td>
-                <Td>{row.diagnosis}</Td>
-                <Td>{row.amount}</Td>
-                <Td>{row.date}</Td>
-                <Td>{row.manager}</Td>
-                <Td>
-                  <StatusBadge status={row.status}>
-                    {row.status === 'Passed' ? 'Passed' : 'Failed'}
-                  </StatusBadge>
-                </Td>
-                <Td>
-                  <Checkbox type="checkbox" defaultChecked={row.checked} />
-                </Td>
-              </TableRow>
-            ))}
-          </tbody>
-        </Table>
+        <TableContainer>
+          <Table>
+            <thead>
+              <tr>
+                <Th>이름</Th>
+                <Th>진단명</Th>
+                <Th>총 금액</Th>
+                <Th>신청 일자</Th>
+                <Th>담당자</Th>
+                <Th>상태</Th>
+                <Th>
+                  <Checkbox
+                    type="checkbox"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
+                </Th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayData.map((row, index) => (
+                <TableRow
+                  key={row.claim_id || index}
+                  onClick={() => navigate(`/report/${row.claim_id}`)}
+                >
+                  <Td>{row.patient_name}</Td>
+                  <Td>{row.diagnosis_name}</Td>
+                  <Td>₩{row.claim_amount?.toLocaleString()}</Td>
+                  <Td>
+                    {new Date(row.created_at).toLocaleDateString('ko-KR')}
+                  </Td>
+                  <Td>{row.user_name}</Td>
+                  <Td>
+                    <StatusBadge status={row.status}>
+                      {row.status === 'passed' ? 'Passed' : 'Failed'}
+                    </StatusBadge>
+                  </Td>
+                  <Td>
+                    <Checkbox
+                      type="checkbox"
+                      checked={selectedClaims.includes(row.claim_id)}
+                      onChange={() => handleCheckboxChange(row.claim_id)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </Td>
+                </TableRow>
+              ))}
+            </tbody>
+          </Table>
+        </TableContainer>
 
         <Pagination>
-          <PageButton>←</PageButton>
-          <PageButton active>1</PageButton>
-          <PageButton>2</PageButton>
-          <PageButton>3</PageButton>
-          <PageButton>4</PageButton>
-          <PageButton>5</PageButton>
-          <PageButton>→</PageButton>
+          <PageButton
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            {'<'}
+          </PageButton>
+
+          {generatePageButtons()}
+
+          <PageButton
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === (totalPages || 1)}
+          >
+            {'>'}
+          </PageButton>
         </Pagination>
       </CustomContainer>
     </div>
