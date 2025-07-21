@@ -3,6 +3,9 @@ import Container from '../components/Container';
 import TextInput from '../components/Textinput';
 import Bigbtn from '../components/buttons/Bigbtn';
 import styled from 'styled-components';
+import { useState } from 'react';
+import { authAPI } from '../services/authAPI';
+import { useNavigate } from 'react-router-dom';
 
 const FlexBox = styled.div`
   display: flex;
@@ -51,6 +54,30 @@ const StyledBigbtn = styled(Bigbtn)`
 `;
 
 function Signup() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordCheck, setPasswordCheck] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleSignup = async () => {
+        if (!name || !email || !password) {
+            setError('모든 항목을 입력해 주세요.');
+            return;
+        }
+        if (password !== passwordCheck) {
+            setError('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+        try {
+            await authAPI.signup({ email, name, password });
+            navigate('/login');
+        } catch (err) {
+            setError(err.message || '회원가입 중 오류가 발생했습니다.');
+        }
+    };
+
     return (
         <>
             <Navbar type="default" />
@@ -58,13 +85,14 @@ function Signup() {
                 <FlexBox>
                     <Title>회원가입</Title>
                     <InputGroup>
-                        <TextInput label="사용자 이름" placeholder="홍길동" />
-                        <TextInput label="아이디 (이메일)" placeholder="example@email.com" type="email" />
-                        <TextInput label="비밀번호" placeholder="password" type="password" />
-                        <TextInput label="비밀번호 확인" placeholder="" type="password" />
+                        <TextInput label="사용자 이름" placeholder="홍길동" value={name} onChange={e => setName(e.target.value)} />
+                        <TextInput label="아이디 (이메일)" placeholder="example@email.com" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+                        <TextInput label="비밀번호" placeholder="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                        <TextInput label="비밀번호 확인" placeholder="" type="password" value={passwordCheck} onChange={e => setPasswordCheck(e.target.value)} />
                     </InputGroup>
-                    <StyledBigbtn>회원가입</StyledBigbtn>
-                    <StyledTextButton href="/login">로그인하기</StyledTextButton>
+                    {error && <div style={{ color: 'red' }}>{error}</div>}
+                    <StyledBigbtn onClick={handleSignup}>회원가입</StyledBigbtn>
+                    <StyledTextButton as="button" type="button" onClick={() => navigate('/login')}>로그인하기</StyledTextButton>
                 </FlexBox>
             </Container>
         </>
