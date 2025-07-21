@@ -329,15 +329,6 @@ function Report() {
   const customerId = parseInt(id) || 1
   const currentCustomer = customerData[customerId] || customerData[1]
 
-  console.log(
-    'Report ID:',
-    id,
-    'Customer ID:',
-    customerId,
-    'Customer:',
-    currentCustomer,
-  )
-
   return (
     <div>
       <Navbar type="user-logged-in" />

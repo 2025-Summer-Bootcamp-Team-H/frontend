@@ -2,17 +2,9 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 export const API_ENDPOINTS = {
-  // Auth
-  LOGIN: '/auth/login',
-  SIGNUP: '/auth/signup',
-
   // Claims
-  CLAIMS: '/api/v1/claims',
-  CLAIMS_SEARCH: '/api/v1/claims/search',
-  UPLOAD: '/api/v1/claims/upload',
-
-  // Reports
-  REPORTS: '/api/v1/reports',
+  CLAIMS: '/claims',
+  CLAIMS_SEARCH: '/claims/search',
 }
 
 export const apiConfig = {
@@ -24,13 +16,13 @@ export const apiConfig = {
 
 // 토큰 관리
 export const getAuthToken = () => {
-  return localStorage.getItem('authToken')
+  return localStorage.getItem('access_token')
 }
 
 export const setAuthToken = (token) => {
-  localStorage.setItem('authToken', token)
+  localStorage.setItem('access_token', token)
 }
 
 export const removeAuthToken = () => {
-  localStorage.removeItem('authToken')
+  localStorage.removeItem('access_token')
 }
