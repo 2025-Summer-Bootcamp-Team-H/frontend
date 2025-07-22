@@ -1,8 +1,35 @@
 import styled from 'styled-components'
-import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Container from '../components/Container'
+import { claimsAPI } from '../services'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler,
+} from 'chart.js'
+import { Pie, Line, Bar } from 'react-chartjs-2'
+
+// Chart.js 등록
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler,
+)
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -70,6 +97,24 @@ const InfoItem = styled.div`
   width: 100%;
 `
 
+const InfoRow = styled.div`
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+`
+
+const InfoItemHalf = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid #f3f4f6;
+  min-height: 3rem;
+  gap: 0.25rem;
+  flex: 1;
+`
+
 const InfoLabel = styled.span`
   color: #6b7280;
   font-size: 0.875rem;
@@ -80,6 +125,7 @@ const InfoValue = styled.span`
   color: #374151;
   font-weight: 500;
   font-size: 0.875rem;
+  white-space: pre-line;
 `
 
 const StatusContainer = styled.div`
@@ -142,34 +188,34 @@ const TrendRate = styled.div`
   font-size: 0.875rem;
 `
 
-const GraphContainer = styled.div`
-  height: 200px;
-  background: #f9fafb;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  position: relative;
-`
-
-const GraphLine = styled.svg`
-  width: 100%;
-  height: 100%;
-`
-
-const GraphText = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: #6b7280;
-`
-
 const TextContent = styled.p`
   color: #6b7280;
   line-height: 1.6;
   font-size: 0.875rem;
+`
+
+const ChartSection = styled.div`
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e5e8eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+`
+
+const ChartSectionTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  text-align: center;
+`
+
+const ChartsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
 `
 
 const CustomContainer = styled(Container)`
@@ -184,150 +230,274 @@ const CustomContainer = styled(Container)`
 function Report() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const [claimData, setClaimData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [])
 
-  // 고객 데이터 (Management 페이지와 동일한 데이터)
-  const customerData = {
-    1: {
-      name: '이인호',
-      diagnosis: 'Type 2 Diabetes',
-      amount: '₩684,900',
-      date: '2024-07-26',
-      manager: '강현진',
-      status: 'Failed',
-      residentNumber: '931201-1234567',
-      insurance: 'Comprehensive Health (종합 건강)',
-      specialTerms:
-        'Pre-existing conditions covered after 12 months (기존 질환은 12개월 후 보장)',
-      calculatedAmount: '₩684,900',
-      annualRate: '+3%',
-    },
-    2: {
-      name: '박주현',
-      diagnosis: 'Hypertension',
-      amount: '₩684,750',
-      date: '2024-07-25',
-      manager: '정종착',
-      status: 'Passed',
-      residentNumber: '880315-2345678',
-      insurance: 'Premium Health Care (프리미엄 건강)',
-      specialTerms:
-        'No waiting period for chronic conditions (만성질환 대기기간 없음)',
-      calculatedAmount: '₩684,750',
-      annualRate: '+5%',
-    },
-    3: {
-      name: '김선경',
-      diagnosis: 'Asthma',
-      amount: '₩965,100',
-      date: '2024-07-24',
-      manager: '김합성',
-      status: 'Failed',
-      residentNumber: '920408-3456789',
-      insurance: 'Standard Health (표준 건강)',
-      specialTerms: 'Respiratory conditions covered (호흡기 질환 보장)',
-      calculatedAmount: '₩965,100',
-      annualRate: '+2%',
-    },
-    4: {
-      name: '최태연',
-      diagnosis: 'Chronic Back Pain',
-      amount: '₩347,000',
-      date: '2024-07-23',
-      manager: '최태연',
-      status: 'Passed',
-      residentNumber: '890712-4567890',
-      insurance: 'Basic Health (기본 건강)',
-      specialTerms: 'Orthopedic conditions covered (정형외과 질환 보장)',
-      calculatedAmount: '₩347,000',
-      annualRate: '+4%',
-    },
-    5: {
-      name: '김다현',
-      diagnosis: 'Migraine',
-      amount: '₩523,400',
-      date: '2024-07-22',
-      manager: '이미영',
-      status: 'Passed',
-      residentNumber: '910325-5678901',
-      insurance: 'Comprehensive Health (종합 건강)',
-      specialTerms: 'Neurological conditions covered (신경과 질환 보장)',
-      calculatedAmount: '₩523,400',
-      annualRate: '+6%',
-    },
-    6: {
-      name: '정민수',
-      diagnosis: 'Osteoarthritis',
-      amount: '₩892,300',
-      date: '2024-07-21',
-      manager: '박준호',
-      status: 'Failed',
-      residentNumber: '870619-6789012',
-      insurance: 'Premium Health Care (프리미엄 건강)',
-      specialTerms: 'Joint conditions covered (관절 질환 보장)',
-      calculatedAmount: '₩892,300',
-      annualRate: '+3%',
-    },
-    7: {
-      name: '윤서연',
-      diagnosis: 'Depression',
-      amount: '₩456,800',
-      date: '2024-07-20',
-      manager: '김지영',
-      status: 'Passed',
-      residentNumber: '930827-7890123',
-      insurance: 'Mental Health Plus (정신건강 플러스)',
-      specialTerms: 'Mental health conditions covered (정신건강 질환 보장)',
-      calculatedAmount: '₩456,800',
-      annualRate: '+7%',
-    },
-    8: {
-      name: '송현우',
-      diagnosis: 'Sleep Apnea',
-      amount: '₩1,234,500',
-      date: '2024-07-19',
-      manager: '최동현',
-      status: 'Failed',
-      residentNumber: '881104-8901234',
-      insurance: 'Comprehensive Health (종합 건강)',
-      specialTerms: 'Sleep disorders covered (수면장애 보장)',
-      calculatedAmount: '₩1,234,500',
-      annualRate: '+4%',
-    },
-    9: {
-      name: '임지은',
-      diagnosis: 'Fibromyalgia',
-      amount: '₩678,900',
-      date: '2024-07-18',
-      manager: '이수진',
-      status: 'Passed',
-      residentNumber: '900213-9012345',
-      insurance: 'Chronic Condition Care (만성질환 케어)',
-      specialTerms: 'Chronic pain conditions covered (만성통증 질환 보장)',
-      calculatedAmount: '₩678,900',
-      annualRate: '+5%',
-    },
-    10: {
-      name: '한준호',
-      diagnosis: 'Anxiety Disorder',
-      amount: '₩345,600',
-      date: '2024-07-17',
-      manager: '박민수',
-      status: 'Failed',
-      residentNumber: '940506-0123456',
-      insurance: 'Mental Health Plus (정신건강 플러스)',
-      specialTerms: 'Anxiety disorders covered (불안장애 보장)',
-      calculatedAmount: '₩345,600',
-      annualRate: '+6%',
+    const fetchClaimData = async () => {
+      // Management 페이지에서 전달받은 데이터가 있으면 사용
+      if (location.state?.claimData) {
+        // Management에서 전달된 데이터로 먼저 설정
+        setClaimData(location.state.claimData)
+
+        // API에서 전체 데이터를 가져와서 병합
+        if (id) {
+          try {
+            console.log('Fetching full data from API for ID:', id)
+            const apiData = await claimsAPI.getById(id)
+            console.log('API Response:', apiData)
+
+            // 환자명으로 전체 청구 내역 검색
+            const patientName =
+              apiData?.patient_name || location.state.claimData?.patient_name
+            if (patientName) {
+              console.log('Searching claims for patient:', patientName)
+              const searchResult = await claimsAPI.search(patientName)
+              console.log('Search result:', searchResult)
+
+              // 검색 결과를 claim_history 형태로 변환
+              const claimHistory = Array.isArray(searchResult)
+                ? searchResult
+                : []
+
+              // 승인 통계 계산
+              const passedCount = claimHistory.filter(
+                (claim) => claim.status === 'passed',
+              ).length
+              const failedCount = claimHistory.filter(
+                (claim) => claim.status === 'failed',
+              ).length
+
+              // 기존 데이터와 API 데이터를 병합 (API 데이터 우선)
+              const mergedData = {
+                ...location.state.claimData,
+                ...apiData, // API 데이터로 덮어쓰기
+                claim_history: claimHistory, // 전체 청구 내역 추가
+                approval_stats: {
+                  passed: passedCount,
+                  failed: failedCount,
+                  total: claimHistory.length,
+                },
+              }
+              console.log('Merged data with history:', mergedData)
+              setClaimData(mergedData)
+            } else {
+              // 환자명이 없으면 기존 방식으로 병합
+              const mergedData = {
+                ...location.state.claimData,
+                ...apiData,
+              }
+              setClaimData(mergedData)
+            }
+          } catch (err) {
+            console.error('Additional data fetch failed:', err)
+          }
+        }
+
+        setLoading(false)
+        return
+      }
+
+      if (!id) {
+        return
+      }
+
+      try {
+        setLoading(true)
+        const data = await claimsAPI.getById(id)
+        setClaimData(data)
+      } catch (err) {
+        setError(err.message)
+        console.error('청구 데이터 로딩 실패:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchClaimData()
+  }, [id])
+
+  if (loading) {
+    return (
+      <div>
+        <Navbar type="user-logged-in" />
+        <Container>
+          <div>로딩 중...</div>
+        </Container>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>
+        <Navbar type="user-logged-in" />
+        <Container>
+          <div>에러: {error}</div>
+        </Container>
+      </div>
+    )
+  }
+
+  if (!claimData) {
+    return (
+      <div>
+        <Navbar type="user-logged-in" />
+        <Container>
+          <div>데이터를 찾을 수 없습니다.</div>
+        </Container>
+      </div>
+    )
+  }
+
+  // Management 페이지에서 전달된 데이터와 API 응답 데이터를 모두 처리
+  const currentCustomer = {
+    // Management 페이지 구조 (평면 구조)
+    name:
+      claimData?.patient_name ||
+      claimData?.patient_info?.patient_name ||
+      '정보 없음',
+    diagnosis:
+      claimData?.diagnosis_name ||
+      claimData?.claim_history?.[0]?.diagnosis_name ||
+      '정보 없음',
+    amount: (() => {
+      const amount =
+        claimData?.claim_amount || claimData?.claim_history?.[0]?.claim_amount
+      return amount ? `₩${amount.toLocaleString()}` : '₩0'
+    })(),
+    date:
+      claimData?.created_at || claimData?.claim_history?.[0]?.created_at
+        ? new Date(
+            claimData?.created_at || claimData?.claim_history?.[0]?.created_at,
+          ).toLocaleDateString('ko-KR')
+        : '정보 없음',
+    manager: claimData?.user_name || '정보 없음',
+    status:
+      (claimData?.review_status ||
+        claimData?.status ||
+        claimData?.claim_history?.[0]?.status) === 'passed'
+        ? 'Passed'
+        : 'Failed',
+    residentNumber:
+      claimData?.patient_ssn ||
+      claimData?.patient_info?.patient_ssn ||
+      '정보 없음',
+    insurance:
+      claimData?.insurance_product || 'Comprehensive Health (종합 건강)', // API에서 가져오기
+    specialTerms: (() => {
+      if (claimData?.clauses && claimData.clauses.length > 0) {
+        return claimData.clauses
+          .map((clause) => `${clause.clause_name}: ${clause.description}`)
+          .join('\n')
+      }
+      return 'Pre-existing conditions covered after 12 months (기존 질환은 12개월 후 보장)'
+    })(),
+    calculatedAmount: (() => {
+      const amount =
+        claimData?.claim_amount || claimData?.claim_history?.[0]?.claim_amount
+      return amount ? `₩${amount.toLocaleString()}` : '₩0'
+    })(),
+    annualRate: '+3%', // 기본값
+  }
+
+  // 차트 데이터 생성 - 해당 환자의 전체 청구 내역 기반
+  // 1. 승인 통계 파이 차트
+  const approvalData = {
+    labels: ['승인 (Passed)', '거절 (Failed)'],
+    datasets: [
+      {
+        data: [
+          claimData?.approval_stats?.passed || 0,
+          claimData?.approval_stats?.failed || 0,
+        ],
+        backgroundColor: ['#4CAF50', '#F44336'],
+        borderColor: ['#45a049', '#da190b'],
+        borderWidth: 2,
+      },
+    ],
+  }
+
+  // 2. 월별 보험료 변화 라인 차트 - claim_history 기반
+  const monthlyTrendData = {
+    labels:
+      claimData?.claim_history?.map((claim) =>
+        new Date(claim.created_at).toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'short',
+        }),
+      ) || [],
+    datasets: [
+      {
+        label: '청구 금액 (원)',
+        data:
+          claimData?.claim_history?.map((claim) => claim.claim_amount) || [],
+        borderColor: '#2196F3',
+        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  }
+
+  // 3. 진단별 청구 금액 바 차트 - claim_history 기반
+  const diagnosisAmountData = {
+    labels:
+      claimData?.claim_history?.map((claim) => claim.diagnosis_name) || [],
+    datasets: [
+      {
+        label: '청구 금액 (원)',
+        data:
+          claimData?.claim_history?.map((claim) => claim.claim_amount) || [],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  }
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
     },
   }
 
-  // 현재 고객 정보 가져오기 (id를 숫자로 변환)
-  const customerId = parseInt(id) || 1
-  const currentCustomer = customerData[customerId] || customerData[1]
+  const lineChartOptions = {
+    ...chartOptions,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value) {
+            return '₩' + value.toLocaleString()
+          },
+        },
+      },
+    },
+  }
+
+  const barChartOptions = {
+    ...chartOptions,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value) {
+            return '₩' + value.toLocaleString()
+          },
+        },
+      },
+    },
+  }
 
   return (
     <div>
@@ -341,22 +511,26 @@ function Report() {
         <Section>
           <SectionTitle>신청자 정보</SectionTitle>
           <InfoList>
-            <InfoItem>
-              <InfoLabel>이름</InfoLabel>
-              <InfoValue>{currentCustomer.name}</InfoValue>
-            </InfoItem>
-            <InfoItem>
-              <InfoLabel>주민번호</InfoLabel>
-              <InfoValue>{currentCustomer.residentNumber}</InfoValue>
-            </InfoItem>
-            <InfoItem>
-              <InfoLabel>신청일자</InfoLabel>
-              <InfoValue>{currentCustomer.date}</InfoValue>
-            </InfoItem>
-            <InfoItem>
-              <InfoLabel>진단명</InfoLabel>
-              <InfoValue>{currentCustomer.diagnosis}</InfoValue>
-            </InfoItem>
+            <InfoRow>
+              <InfoItemHalf>
+                <InfoLabel>이름</InfoLabel>
+                <InfoValue>{currentCustomer.name}</InfoValue>
+              </InfoItemHalf>
+              <InfoItemHalf>
+                <InfoLabel>주민번호</InfoLabel>
+                <InfoValue>{currentCustomer.residentNumber}</InfoValue>
+              </InfoItemHalf>
+            </InfoRow>
+            <InfoRow>
+              <InfoItemHalf>
+                <InfoLabel>신청일자</InfoLabel>
+                <InfoValue>{currentCustomer.date}</InfoValue>
+              </InfoItemHalf>
+              <InfoItemHalf>
+                <InfoLabel>진단명</InfoLabel>
+                <InfoValue>{currentCustomer.diagnosis}</InfoValue>
+              </InfoItemHalf>
+            </InfoRow>
             <InfoItem>
               <InfoLabel>담당자</InfoLabel>
               <InfoValue>{currentCustomer.manager}</InfoValue>
@@ -405,34 +579,32 @@ function Report() {
               <TrendRate>Annual {currentCustomer.annualRate}</TrendRate>
             </TrendInfo>
           </TrendContainer>
-          <GraphContainer>
-            <GraphLine viewBox="0 0 400 150">
-              <path
-                d="M 20 120 L 60 80 L 100 100 L 140 60 L 180 80 L 220 100 L 260 120 L 300 90 L 340 110 L 380 70"
-                stroke="#3b82f6"
-                strokeWidth="3"
-                fill="none"
-              />
-            </GraphLine>
-            <GraphText>
-              <span>Jan</span>
-              <span>Feb</span>
-              <span>Mar</span>
-              <span>Apr</span>
-              <span>May</span>
-              <span>Jun</span>
-              <span>Jul</span>
-            </GraphText>
-          </GraphContainer>
+          <div style={{ height: '300px', marginTop: '1rem' }}>
+            <Line data={monthlyTrendData} options={lineChartOptions} />
+          </div>
         </Section>
+
+        <ChartsGrid>
+          <ChartSection>
+            <ChartSectionTitle>승인 통계</ChartSectionTitle>
+            <div style={{ height: '250px' }}>
+              <Pie data={approvalData} options={chartOptions} />
+            </div>
+          </ChartSection>
+
+          <ChartSection>
+            <ChartSectionTitle>진단별 청구 금액</ChartSectionTitle>
+            <div style={{ height: '250px' }}>
+              <Bar data={diagnosisAmountData} options={barChartOptions} />
+            </div>
+          </ChartSection>
+        </ChartsGrid>
 
         <Section>
           <SectionTitle>심사 근거 및 조항 해석</SectionTitle>
           <TextContent>
-            보험료 산정 기준(연령, 직업, 건강 보장 금액)과 기존 질환 관련
-            특약(12개월 대기 기간 후 보장)에 대한 설명입니다. 신청자의 건강
-            상태와 보험 가입 조건을 종합적으로 검토하여 위의 금액으로
-            산정되었습니다.
+            {claimData?.review_basis ||
+              '보험료 산정 기준(연령, 직업, 건강 보장 금액)과 기존 질환 관련 특약(12개월 대기 기간 후 보장)에 대한 설명입니다. 신청자의 건강 상태와 보험 가입 조건을 종합적으로 검토하여 위의 금액으로 산정되었습니다.'}
           </TextContent>
         </Section>
       </CustomContainer>
