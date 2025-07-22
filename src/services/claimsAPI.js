@@ -15,6 +15,10 @@ export const claimsAPI = {
     return await apiClient.get('/claims/search', { params })
   },
 
+  getById: async (id) => {
+    return await apiClient.get(`/claims/${id}`)
+  },
+
   delete: async (id) => {
     return await apiClient.delete(`/claims/${id}`)
   },

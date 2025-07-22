@@ -501,7 +501,11 @@ function Management() {
               {displayData.map((row, index) => (
                 <TableRow
                   key={row.claim_id || index}
-                  onClick={() => navigate(`/report/${row.claim_id}`)}
+                  onClick={() =>
+                    navigate(`/report/${row.claim_id}`, {
+                      state: { claimData: row },
+                    })
+                  }
                 >
                   <Td>{row.patient_name}</Td>
                   <Td>{row.diagnosis_name}</Td>
