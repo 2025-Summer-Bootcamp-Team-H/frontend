@@ -22,4 +22,11 @@ export const claimsAPI = {
   delete: async (id) => {
     return await apiClient.delete(`/claims/${id}`)
   },
+
+  create: async (diagnosisId, receiptId) => {
+    return await apiClient.post('/claims', {
+      diagnosis_id: diagnosisId,
+      receipt_id: receiptId,
+    })
+  },
 }

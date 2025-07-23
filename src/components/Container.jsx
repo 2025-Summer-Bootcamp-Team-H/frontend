@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 const ContainerWrapper = styled.div`
-  width: 80vw;
+  width: 70vw;
   height: 70vh;
   padding: 30px 60px;
   display: flex;

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 const Smallbtn = styled.button`
   background: #3182f6;
@@ -20,6 +20,6 @@ const Smallbtn = styled.button`
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
     transform: translateY(-0.5px) scale(1.01);
   }
-`;
+`
 
-export default Smallbtn;
+export default Smallbtn

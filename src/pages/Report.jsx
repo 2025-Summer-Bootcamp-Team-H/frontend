@@ -398,9 +398,9 @@ function Report() {
       return 'Pre-existing conditions covered after 12 months (기존 질환은 12개월 후 보장)'
     })(),
     calculatedAmount: (() => {
-      const amount =
-        claimData?.claim_amount || claimData?.claim_history?.[0]?.claim_amount
-      return amount ? `₩${amount.toLocaleString()}` : '₩0'
+      // Management 페이지와 동일하게 claim_amount 사용
+      const amount = claimData?.claim_amount || 0
+      return `₩${amount.toLocaleString()}`
     })(),
     annualRate: '+3%', // 기본값
   }

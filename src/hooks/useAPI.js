@@ -62,9 +62,22 @@ export const useClaims = (
           bValue = new Date(b.created_at)
           break
         case 'status':
-          aValue = a.status
-          bValue = b.status
-          break
+          // 상태별 정렬: 먼저 상태로 정렬하고, 같은 상태 내에서는 신청일자 최신순
+          if (a.status !== b.status) {
+            // 상태가 다르면 sortOrder에 따라 상태 순서 결정
+            if (sortOrder === 'desc') {
+              // 내림차순: passed가 먼저, failed가 나중에
+              return a.status === 'passed' ? -1 : 1
+            } else {
+              // 오름차순: failed가 먼저, passed가 나중에
+              return a.status === 'failed' ? -1 : 1
+            }
+          } else {
+            // 상태가 같으면 신청일자 최신순 (내림차순)
+            aValue = new Date(a.created_at)
+            bValue = new Date(b.created_at)
+            return aValue < bValue ? 1 : -1
+          }
         case 'amount':
           aValue = a.claim_amount || 0
           bValue = b.claim_amount || 0
@@ -73,7 +86,10 @@ export const useClaims = (
           return 0
       }
 
-      if (sortOrder === 'asc') {
+      if (sortBy === 'status') {
+        // 상태별 정렬은 위에서 이미 처리됨
+        return 0
+      } else if (sortOrder === 'asc') {
         return aValue > bValue ? 1 : -1
       } else {
         return aValue < bValue ? 1 : -1
