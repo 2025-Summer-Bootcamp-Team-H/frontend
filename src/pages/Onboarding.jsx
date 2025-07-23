@@ -11,6 +11,8 @@ import OldMan from '../assets/Onboarding/OldMan.png'
 import YoungMan2 from '../assets/Onboarding/YoungMan2.png'
 import Customer from '../assets/Onboarding/Customer.png'
 import User from '../assets/Onboarding/User.png'
+import { useEffect, useState } from 'react'
+
 
 const PageWrapper = styled.div`
   width: 100vw;
@@ -60,8 +62,8 @@ const Logo = styled.div`
 `
 
 const LogoImg = styled.img`
-  height: 40px;
-  margin-right: 12px;
+  height: 30px;
+  margin-right: 8px;
   display: block;
 `
 
@@ -241,9 +243,18 @@ const FeatureBlock = styled.div`
   height: 100svh;
   max-width: 1200px;
   width: 85%;
-  gap: 60px;
+  gap: 40px;
   padding: 0 80px;
   margin: 0 auto;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   &:nth-child(odd) {
     flex-direction: row;
@@ -253,6 +264,7 @@ const FeatureBlock = styled.div`
     flex-direction: row-reverse;
     padding: 0 80px;
     justify-content: flex-end;
+    margin-top: -150px;  // 두 번째 블록만 위로 올림
   }
 
   @media (max-width: 768px) {
@@ -268,7 +280,7 @@ const FeatureImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 300px;
+  min-width: 600px;
 `
 
 const ImageContainer = styled.div`
@@ -288,8 +300,8 @@ const ImageContainer = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    height: 90%;
+    width: 95%;
+    height: 95%;
     background-image: url(${(props) => props.src});
     background-size: contain;
     background-repeat: no-repeat;
@@ -306,11 +318,13 @@ const FeatureTextContent = styled.div`
 `
 
 const FeatureHeadline = styled.h2`
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: 600;
   color: #1f2937;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+  white-space: nowrap;
+  margin-top: -50px;  // 위쪽 여백을 줄여서 위로 올림
 `
 
 const FeatureDescription = styled.p`
@@ -318,6 +332,7 @@ const FeatureDescription = styled.p`
   color: #6b7280;
   line-height: 1.5;
   margin-bottom: 2rem;
+  margin-top: -20px;  // 위쪽 여백을 줄여서 위로 올림
 `
 
 // --- Section 3: Dashboard Preview (Dark Blue Background) ---
@@ -326,7 +341,13 @@ const DashboardSection = styled.section`
   height: 1024px;
   width: 100vw;
   margin: 0;
-  background: linear-gradient(180deg, #3b82f6 0%, #1e40af 50%, #1e3a8a 100%);
+  background: linear-gradient(180deg, 
+    #3b82f6 0%, 
+    #3b82f6 20%,
+    #1e40af 50%, 
+    #1e1e1e 80%, 
+    #000000 100%
+  );
   color: white;
   text-align: center;
   display: flex;
@@ -336,19 +357,65 @@ const DashboardSection = styled.section`
   gap: 40px;
   padding: 0;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+`
+
+const DashboardContainer = styled.div`
+  background-color: white;
+  border-radius: 20px;
+  padding: 50px;
+  max-width: 1400px;
+  width: 95%;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+`
+
+const DashboardContent = styled.div`
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  justify-content: center;
+`
+
+const DashboardImageContainer = styled.div`
+  width: 600px;
+  height: 550px;
   overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+  background-color: #f8fafc;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `
 
 const DashboardTitle = styled.h2`
   font-size: 2.8rem;
   font-weight: bold;
   margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `
 
 // --- Section 4: Service Benefits/Testimonials (Dark Blue Background) ---
 const BenefitsSection = styled.section`
   padding: 80px 0;
-  background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+  background: linear-gradient(180deg, 
+    #000000 0%,
+    #1e1e1e 10%,
+    #1e40af 30%,
+    #3b82f6 100%
+  );
   color: white;
   text-align: center;
   display: flex;
@@ -475,7 +542,6 @@ const SelectionCardsContainer = styled.div`
 
 const SelectionCard = styled.div`
   background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
-
   border-radius: 20px;
   padding: 45px 35px;
   display: flex;
@@ -486,12 +552,14 @@ const SelectionCard = styled.div`
   flex: 1;
   min-width: 280px;
   cursor: pointer;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  box-shadow:
-    0 8px 25px rgba(30, 58, 138, 0.3),
-    0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   img {
     width: 100px;
@@ -501,9 +569,7 @@ const SelectionCard = styled.div`
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow:
-      0 15px 35px rgba(30, 58, 138, 0.4),
-      0 8px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.4), 0 8px 15px rgba(0, 0, 0, 0.15);
   }
 
   @media (max-width: 768px) {
@@ -526,6 +592,64 @@ const SelectionCardDescription = styled.p`
 
 function Onboarding() {
   const navigate = useNavigate()
+  const [isVisible1, setIsVisible1] = useState(false)
+  const [isVisible2, setIsVisible2] = useState(false)
+  const [isDashboardVisible, setIsDashboardVisible] = useState(false)
+  const [isSelectionVisible1, setIsSelectionVisible1] = useState(false)
+  const [isSelectionVisible2, setIsSelectionVisible2] = useState(false)
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      // Feature Blocks 애니메이션 체크
+      const featureBlocks = document.querySelectorAll('.feature-block')
+      featureBlocks.forEach((block, index) => {
+        const blockTop = block.getBoundingClientRect().top
+        const blockBottom = block.getBoundingClientRect().bottom
+        const windowHeight = window.innerHeight
+        
+        if (blockTop < windowHeight * 0.75 && blockBottom > 0) {
+          if (index === 0) setIsVisible1(true)
+          if (index === 1) setIsVisible2(true)
+        } else {
+          if (index === 0) setIsVisible1(false)
+          if (index === 1) setIsVisible2(false)
+        }
+      })
+
+      // Dashboard Section 애니메이션 체크
+      const dashboardSection = document.querySelector('.dashboard-section')
+      if (dashboardSection) {
+        const sectionTop = dashboardSection.getBoundingClientRect().top
+        const sectionBottom = dashboardSection.getBoundingClientRect().bottom
+        
+        if (sectionTop < window.innerHeight * 0.75 && sectionBottom > 0) {
+          setIsDashboardVisible(true)
+        } else {
+          setIsDashboardVisible(false)
+        }
+      }
+
+      // Selection Cards 애니메이션 체크
+      const selectionCards = document.querySelectorAll('.selection-card')
+      selectionCards.forEach((card, index) => {
+        const cardTop = card.getBoundingClientRect().top
+        const cardBottom = card.getBoundingClientRect().bottom
+        
+        if (cardTop < window.innerHeight * 0.75 && cardBottom > 0) {
+          if (index === 0) setIsSelectionVisible1(true)
+          if (index === 1) setTimeout(() => setIsSelectionVisible2(true), 400)
+        } else {
+          if (index === 0) setIsSelectionVisible1(false)
+          if (index === 1) setIsSelectionVisible2(false)
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+    
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleGetStartedClick = () => {
     window.scrollTo({
@@ -621,10 +745,10 @@ function Onboarding() {
             <span
               style={{
                 fontWeight: 'bold',
-                fontSize: '2rem',
+                fontSize: '1.5rem',
                 color: '#1f2937',
                 letterSpacing: '-1px',
-                marginTop: '10px',
+                marginTop: '8px',
                 cursor: 'default',
               }}
             >
@@ -651,25 +775,25 @@ function Onboarding() {
 
       {/* Feature Highlights Section */}
       <FeatureSection>
-        <FeatureBlock>
+        <FeatureBlock className={`feature-block ${isVisible1 ? 'visible' : ''}`}>
           <FeatureImageWrapper>
             <ImageContainer src={Second} />
           </FeatureImageWrapper>
           <FeatureTextContent>
             <FeatureHeadline>
-              <span style={{ color: '#3b82f6' }}>
-                진단서와 영수증만 업로드하면 끝!
-              </span>
+              <span style={{ color: '#3b82f6' }}>진단서와 영수증</span>만 업로드하면 끝!
               <br />
               복잡한 보험 청구, 이제 간편하게
             </FeatureHeadline>
             <FeatureDescription>
-              진단서와 영수증 하나만 업로드하면, 복잡한 서류 제출 없이
+              진단서와 영수증 하나만 업로드하면,
+              <br />복잡한 서류 제출 없이
               <br />더 쉽고 빠르게 청구할 수 있습니다.
             </FeatureDescription>
           </FeatureTextContent>
         </FeatureBlock>
-        <FeatureBlock>
+
+        <FeatureBlock className={`feature-block ${isVisible2 ? 'visible' : ''}`}>
           <FeatureImageWrapper>
             <ImageContainer src={Third} />
           </FeatureImageWrapper>
@@ -677,9 +801,7 @@ function Onboarding() {
             <FeatureHeadline>
               업로드된 정보를 자동 분석하여
               <br />
-              <span style={{ color: '#3b82f6' }}>
-                1차 보험 심사부터 산정 금액 계산까지 한번에!
-              </span>
+              <span style={{ color: '#3b82f6' }}>1차 보험 심사</span>부터 <span style={{ color: '#3b82f6' }}>산정 금액 계산</span>까지 한번에!
             </FeatureHeadline>
             <FeatureDescription>
               업로드된 진단서와 영수증을 자동 분석해
@@ -693,85 +815,57 @@ function Onboarding() {
       </FeatureSection>
 
       {/* Dashboard Preview Section */}
-      <DashboardSection>
-        <DashboardTitle>Claim Bridge에서 경험하세요</DashboardTitle>
-        <div
-          style={{
-            backgroundColor: 'white',
-            borderRadius: '20px',
-            padding: '40px',
-            maxWidth: '1200px',
-            width: '90%',
-            margin: '0 auto',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              gap: '40px',
-              alignItems: 'flex-start',
-            }}
-          >
-            <div style={{ flex: 1 }}>
+      <DashboardSection className="dashboard-section">
+        <DashboardTitle className={isDashboardVisible ? 'visible' : ''}>
+          Claim Bridge에서 경험하세요
+        </DashboardTitle>
+        <DashboardContainer>
+          <DashboardContent>
+            <div style={{ flex: 1, maxWidth: '600px' }}>
               <h3
                 style={{
                   fontSize: '1.5rem',
                   fontWeight: 'bold',
-                  marginBottom: '20px',
+                  marginBottom: '25px',
                   lineHeight: '1.4',
                 }}
               >
                 <span style={{ color: '#6b7280' }}>한눈에 볼 수 있는</span>{' '}
                 <span style={{ color: '#3b82f6' }}>관리 페이지</span>
               </h3>
-              <img
-                src={Management}
-                alt="Management page"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  borderRadius: '8px',
-                }}
-              />
+              <DashboardImageContainer>
+                <img src={Management} alt="Management page" />
+              </DashboardImageContainer>
             </div>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, maxWidth: '600px' }}>
               <h3
                 style={{
                   fontSize: '1.5rem',
                   fontWeight: 'bold',
-                  marginBottom: '20px',
+                  marginBottom: '25px',
                   lineHeight: '1.4',
                 }}
               >
                 <span style={{ color: '#6b7280' }}>간편하게 확인하는</span>{' '}
                 <span style={{ color: '#3b82f6' }}>보험 산정 금액</span>
               </h3>
-              <img
-                src={Report}
-                alt="Insurance report"
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  borderRadius: '8px',
-                }}
-              />
+              <DashboardImageContainer>
+                <img src={Report} alt="Insurance report" />
+              </DashboardImageContainer>
             </div>
-          </div>
-        </div>
+          </DashboardContent>
+        </DashboardContainer>
       </DashboardSection>
 
       {/* Service Benefits/Testimonials Section */}
       <BenefitsSection>
-        <BenefitsTitle>&apos;다른&apos; 보험 상담 서비스</BenefitsTitle>
+        <BenefitsTitle>간편하고 편리한 보험 서비스</BenefitsTitle>
         <BenefitsSubtitle>
-          토스인슈어런스 보험상담 후기에 가장 많이 등장하는 단어는
-          &apos;다른&apos;이에요. 상담을 받으면서 자연스럽게 이전에 경험했던
-          보험상담과 비교하기 때문인데요. 어떤 점이 달랐을까요?
+          많은 고객들과 보험사 직원들이 편리하게 사용한 Claim Bridge,
+          <br />어떤 점이 달랐을까요?
         </BenefitsSubtitle>
         <div style={{ overflow: 'hidden', width: '100%' }}>
           <BenefitsCardsContainer>
-            {/* 첫 번째 세트 */}
             {/* 첫 번째 세트 */}
             <BenefitCard>
               <BenefitCardTitle>편리한 보험 청구</BenefitCardTitle>
@@ -1003,10 +1097,11 @@ function Onboarding() {
       <SelectionSection>
         <SelectionCardsContainer>
           <SelectionTitle>사용하실 서비스를 선택해주세요</SelectionTitle>
-          <div
-            style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
-          >
-            <SelectionCard onClick={() => navigate('/upload')}>
+          <div style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}>
+            <SelectionCard 
+              className={`selection-card ${isSelectionVisible1 ? 'visible' : ''}`}
+              onClick={() => navigate('/upload')}
+            >
               <img src={Customer} alt="Customer" />
               <SelectionCardTitle>일반 사용자</SelectionCardTitle>
               <SelectionCardDescription>
@@ -1015,7 +1110,10 @@ function Onboarding() {
                 보험 청구 완료
               </SelectionCardDescription>
             </SelectionCard>
-            <SelectionCard onClick={() => navigate('/login')}>
+            <SelectionCard 
+              className={`selection-card ${isSelectionVisible2 ? 'visible' : ''}`}
+              onClick={() => navigate('/login')}
+            >
               <img src={User} alt="User" />
               <SelectionCardTitle>보험사 직원</SelectionCardTitle>
               <SelectionCardDescription>
