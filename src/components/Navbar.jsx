@@ -6,8 +6,8 @@ import { authAPI } from '../services'
 
 const HeaderWrapper = styled.header`
   width: 100%;
-  height: 80px;
-  padding: 12px 30px 12px 30px;
+  height: 65px;
+  padding: 8px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,7 +25,7 @@ const LogoBox = styled.div`
 
 const LogoImg = styled.img`
   height: 32px;
-  margin-right: 12px;
+  margin-right: 4px;
   display: block;
 `
 
@@ -34,7 +34,7 @@ const LogoText = styled.span`
   font-size: 1.5rem;
   color: #222;
   letter-spacing: -1px;
-  margin-top: 10px;
+  margin-top: 6px;
   cursor: default;
 `
 

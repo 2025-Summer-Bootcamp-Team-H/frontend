@@ -10,7 +10,7 @@ import Reject from '../assets/Analysis/Reject.png'
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
-  height: 1.2vh;
+  height: 7px;
   background: #f2f4f6;
   overflow: hidden;
   margin-bottom: 2.5vh;

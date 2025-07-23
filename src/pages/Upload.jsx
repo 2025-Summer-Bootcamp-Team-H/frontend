@@ -115,7 +115,7 @@ const TopSection = styled.div`
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
-  height: 10px;
+  height: 7px;
   background: #f2f4f6;
   overflow: hidden;
   margin-bottom: 2rem;
