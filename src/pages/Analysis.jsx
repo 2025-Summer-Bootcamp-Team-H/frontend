@@ -65,6 +65,15 @@ const OverlayIcon = styled.img`
   z-index: ${(props) => props.z || 1};
 `
 
+const AccuracyText = styled.div`
+  font-size: 1vw;
+  font-weight: bold;
+  font-family: 'Public Sans';
+  text-align: center;
+  margin-top: 1vh;
+  color: ${(props) => (props.$isPassed ? '#4CAF50' : '#F44336')};
+`
+
 const image1 = './assets/Analysis/Test.png'
 
 function Analysis() {
@@ -94,7 +103,6 @@ function Analysis() {
 
         // 위조분석 결과 조회
         const result = await forgeryAPI.getAnalysisResult(forgeryAnalysisId)
-        console.log('Analysis result:', result)
 
         // analysis_result 문자열을 파싱
         const analysisText = result?.analysis_result || ''
@@ -103,14 +111,33 @@ function Analysis() {
         )
         const isReceiptAuthentic = analysisText.includes('receipt: authentic')
 
-        console.log('Analysis text:', analysisText)
-        console.log('Diagnosis authentic:', isDiagnosisAuthentic)
-        console.log('Receipt authentic:', isReceiptAuthentic)
+        // API 응답 구조 확인을 위한 로그
+        console.log('Forgery Analysis Result:', result)
+        console.log('Analysis Text:', analysisText)
+        console.log('Is Diagnosis Authentic:', isDiagnosisAuthentic)
+        console.log('Is Receipt Authentic:', isReceiptAuthentic)
+        console.log('Available fields:', Object.keys(result))
+        console.log('Confidence score value:', result.confidence_score)
+        console.log('Diagnosis result:', result.diagnosis_result)
+        console.log('Receipt result:', result.receipt_result)
 
         setAnalysisResult({
           ...result,
-          diagnosis_result: { is_forged: !isDiagnosisAuthentic },
-          receipt_result: { is_forged: !isReceiptAuthentic },
+          diagnosis_result: {
+            is_forged:
+              result.diagnosis_result?.is_forged ?? !isDiagnosisAuthentic,
+            confidence:
+              result.diagnosis_result?.confidence ||
+              result.confidence_score ||
+              0.95,
+          },
+          receipt_result: {
+            is_forged: result.receipt_result?.is_forged ?? !isReceiptAuthentic,
+            confidence:
+              result.receipt_result?.confidence ||
+              result.confidence_score ||
+              0.95,
+          },
         })
 
         // 이미지 URL 설정
@@ -128,7 +155,19 @@ function Analysis() {
   }, [location.state])
 
   const handleNextClick = () => {
-    navigate('/diagnosis_edit')
+    // location.state에서 diagnosis_id와 receipt_id 가져오기
+    const { diagnosisId, receiptId } = location.state || {}
+    if (diagnosisId) {
+      navigate('/diagnosis_edit', {
+        state: {
+          diagnosisId: diagnosisId,
+          receiptId: receiptId, // receipt_id도 함께 전달
+        },
+      })
+    } else {
+      // diagnosis_id가 없으면 에러 처리
+      alert('진단서 ID를 찾을 수 없습니다.')
+    }
   }
 
   const handlePrevClick = () => {
@@ -190,6 +229,27 @@ function Analysis() {
                     />
                   )}
                 </ImageBox>
+                {analysisResult && (
+                  <AccuracyText
+                    $isPassed={
+                      analysisResult.diagnosis_result?.is_forged === false
+                    }
+                  >
+                    위조 확률:{' '}
+                    {analysisResult.diagnosis_result?.is_forged === false
+                      ? (
+                          100 -
+                          (analysisResult.diagnosis_result?.confidence ||
+                            0.95) *
+                            100
+                        ).toFixed(2)
+                      : (
+                          (analysisResult.diagnosis_result?.confidence ||
+                            0.95) * 100
+                        ).toFixed(2)}
+                    %
+                  </AccuracyText>
+                )}
               </div>
               <div>
                 <SubTitle>병원 영수증</SubTitle>
@@ -219,6 +279,26 @@ function Analysis() {
                     />
                   )}
                 </ImageBox>
+                {analysisResult && (
+                  <AccuracyText
+                    $isPassed={
+                      analysisResult.receipt_result?.is_forged === false
+                    }
+                  >
+                    위조 확률:{' '}
+                    {analysisResult.receipt_result?.is_forged === false
+                      ? (
+                          100 -
+                          (analysisResult.receipt_result?.confidence || 0.95) *
+                            100
+                        ).toFixed(2)
+                      : (
+                          (analysisResult.receipt_result?.confidence || 0.95) *
+                          100
+                        ).toFixed(2)}
+                    %
+                  </AccuracyText>
+                )}
               </div>
             </div>
           )}
@@ -226,11 +306,13 @@ function Analysis() {
       </CustomContainer>
       <div
         style={{
-          width: '80vw',
+          width: '79vw',
           margin: '10px auto',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          padding: '0 60px',
+          boxSizing: 'border-box',
         }}
       >
         <div>

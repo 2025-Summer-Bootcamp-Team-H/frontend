@@ -5,6 +5,7 @@ import BigBtn from '../components/buttons/Bigbtn'
 import { useNavigate } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import { diagnosisAPI, receiptAPI, forgeryAPI } from '../services'
+import LoadingOverlay from '../components/LoadingOverlay'
 
 const Text = styled.p`
   font-size: clamp(0.875rem, 2.5vw, 1rem);
@@ -170,7 +171,7 @@ function Upload() {
     try {
       setIsUploading(true)
       const response = await diagnosisAPI.uploadImage(file)
-      console.log('Upload response:', response)
+
       setDiagnosisId(response.diagnosis_id)
       alert('진단서 업로드가 완료되었습니다.')
     } catch (error) {
@@ -214,7 +215,7 @@ function Upload() {
     try {
       setIsReceiptUploading(true)
       const response = await receiptAPI.uploadImage(file)
-      console.log('Receipt upload response:', response)
+
       setReceiptId(response.receipt_id)
       alert('영수증 업로드가 완료되었습니다.')
     } catch (error) {
@@ -254,7 +255,9 @@ function Upload() {
         diagnosisId,
         receiptId,
       )
-      console.log('Analysis response:', analysisResponse)
+
+      // 2초 대기 (신뢰성을 위한 로딩 시간)
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
       // Analysis 페이지로 데이터 전달
       navigate('/analysis', {
@@ -277,6 +280,11 @@ function Upload() {
 
   return (
     <div>
+      <LoadingOverlay
+        isVisible={isAnalyzing}
+        title="위조 분석 중..."
+        text="문서를 분석하고 있습니다. 잠시만 기다려주세요."
+      />
       <Navbar />
       <ProgressBarWrapper>
         <Progress />
