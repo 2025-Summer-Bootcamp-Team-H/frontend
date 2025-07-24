@@ -306,34 +306,27 @@ function Analysis() {
       </CustomContainer>
       <div
         style={{
-          width: '79vw',
-          margin: '10px auto',
+          width: '70vw',
+          margin: '0 auto',
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          padding: '0 60px',
-          boxSizing: 'border-box',
+          justifyContent: 'flex-end',
+          marginTop: '2vh',
         }}
       >
-        <div>
-          {analysisResult &&
-            analysisResult.diagnosis_result &&
-            analysisResult.receipt_result &&
-            (analysisResult.diagnosis_result.is_forged === true ||
-              analysisResult.receipt_result.is_forged === true) && (
-              <SmallButton onClick={handlePrevClick}>이전 단계로</SmallButton>
-            )}
-        </div>
-
-        <div>
-          {analysisResult &&
-            analysisResult.diagnosis_result &&
-            analysisResult.receipt_result &&
-            analysisResult.diagnosis_result.is_forged === false &&
-            analysisResult.receipt_result.is_forged === false && (
-              <SmallButton onClick={handleNextClick}>다음 단계로</SmallButton>
-            )}
-        </div>
+        {analysisResult &&
+          analysisResult.diagnosis_result &&
+          analysisResult.receipt_result &&
+          (analysisResult.diagnosis_result.is_forged === true ||
+            analysisResult.receipt_result.is_forged === true) && (
+            <SmallButton onClick={handlePrevClick}>이전 단계로</SmallButton>
+          )}
+        {analysisResult &&
+          analysisResult.diagnosis_result &&
+          analysisResult.receipt_result &&
+          analysisResult.diagnosis_result.is_forged === false &&
+          analysisResult.receipt_result.is_forged === false && (
+            <SmallButton onClick={handleNextClick}>다음 단계로</SmallButton>
+          )}
       </div>
     </div>
   )

@@ -215,6 +215,7 @@ const PageButton = styled.button`
 `
 
 const CustomContainer = styled(Container)`
+  width: 90vw;
   height: auto;
   min-height: 100vh;
   max-height: none;

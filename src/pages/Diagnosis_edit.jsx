@@ -41,12 +41,6 @@ const ImageBox = styled.div`
   overflow: hidden;
 `
 
-const Image = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-`
-
 const TextAreaBox = styled.textarea`
   width: 100%;
   height: 44vh;
@@ -105,6 +99,8 @@ function DiagnosisEdit() {
   const [ocrLoading, setOcrLoading] = useState(false)
   const [error, setError] = useState(null)
   const [diagnosisId, setDiagnosisId] = useState(null)
+  const [isHovered, setIsHovered] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const hasInitialized = useRef(false)
 
   useEffect(() => {
@@ -211,6 +207,27 @@ function DiagnosisEdit() {
       setLoading(false)
       setOcrLoading(false)
     }
+  }
+
+  // 호버 이벤트 핸들러
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    // 이미지의 실제 크기에 대한 백분율로 계산
+    const xPercent = (x / rect.width) * 100
+    const yPercent = (y / rect.height) * 100
+
+    setMousePosition({ x: xPercent, y: yPercent })
   }
 
   const handleNextClick = async () => {
@@ -331,9 +348,43 @@ function DiagnosisEdit() {
           >
             <div>
               <SubTitle>병원 진단서</SubTitle>
-              <ImageBox>
+              <ImageBox
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onMouseMove={handleMouseMove}
+                style={{ position: 'relative' }}
+              >
                 {diagnosisImage ? (
-                  <Image src={diagnosisImage} alt="병원 진단서" />
+                  <>
+                    <img
+                      src={diagnosisImage}
+                      alt="병원 진단서"
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        objectFit: 'contain',
+                        transition: 'transform 0.3s ease',
+                        transformOrigin: `${mousePosition.x}% ${mousePosition.y}%`,
+                        transform: `scale(${isHovered ? 2 : 1})`,
+                        cursor: 'zoom-in',
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '10px',
+                        left: '10px',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        zIndex: 10,
+                      }}
+                    >
+                      {Math.round(isHovered ? 200 : 100)}%
+                    </div>
+                  </>
                 ) : (
                   <LoadingText>이미지 로딩 중...</LoadingText>
                 )}
