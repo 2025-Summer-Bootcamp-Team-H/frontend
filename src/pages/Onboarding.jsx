@@ -226,8 +226,8 @@ const ScrollIndicator = styled.div`
 
 // --- Section 2: Feature Highlights (White Background) ---
 const FeatureSection = styled.section`
-  min-height: 100svh;
-  padding: 0;
+  min-height: 85svh;
+  padding: 32px 0;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -239,11 +239,11 @@ const FeatureSection = styled.section`
 const FeatureBlock = styled.div`
   display: flex;
   align-items: center;
-  min-height: 100svh;
-  height: 100svh;
+  min-height: 85svh;
+  height: 85svh;
   max-width: 1200px;
   width: 85%;
-  gap: 40px;
+  gap: 32px;
   padding: 0 80px;
   margin: 0 auto;
   margin-bottom: 0;
@@ -264,7 +264,8 @@ const FeatureBlock = styled.div`
     flex-direction: row-reverse;
     padding: 0 80px;
     justify-content: flex-end;
-    margin-top: -150px;  // 두 번째 블록만 위로 올림
+    margin-top: -420px;  // 두 번째 블록만 위로 올림
+    margin-right: 75px;
   }
 
   @media (max-width: 768px) {
@@ -280,7 +281,11 @@ const FeatureImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 600px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  margin-top: -160px;
+  height: 100%;
 `
 
 const ImageContainer = styled.div`
@@ -315,6 +320,10 @@ const FeatureTextContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  justify-content: center;
 `
 
 const FeatureHeadline = styled.h2`
@@ -776,10 +785,10 @@ function Onboarding() {
       {/* Feature Highlights Section */}
       <FeatureSection>
         <FeatureBlock className={`feature-block ${isVisible1 ? 'visible' : ''}`}>
-          <FeatureImageWrapper>
+          <FeatureImageWrapper style={{ transform: 'translateX(-60px)' }}>
             <ImageContainer src={Second} />
           </FeatureImageWrapper>
-          <FeatureTextContent>
+          <FeatureTextContent style={{ marginLeft: '-210px' }}>
             <FeatureHeadline>
               <span style={{ color: '#3b82f6' }}>진단서와 영수증</span>만 업로드하면 끝!
               <br />
@@ -794,14 +803,15 @@ function Onboarding() {
         </FeatureBlock>
 
         <FeatureBlock className={`feature-block ${isVisible2 ? 'visible' : ''}`}>
-          <FeatureImageWrapper>
-            <ImageContainer src={Third} />
+          <FeatureImageWrapper style={{ transform: 'translateX(-110px)', marginTop: '10px' }}>
+            <ImageContainer src={Third} style={{ width: '1050px', height: '1000px' }} />
           </FeatureImageWrapper>
-          <FeatureTextContent>
+          <FeatureTextContent style={{ marginTop: '160px' }}>
             <FeatureHeadline>
               업로드된 정보를 자동 분석하여
               <br />
-              <span style={{ color: '#3b82f6' }}>1차 보험 심사</span>부터 <span style={{ color: '#3b82f6' }}>산정 금액 계산</span>까지 한번에!
+              <span style={{ color: '#3b82f6' }}>1차 보험 심사</span>부터 <span style={{ color: '#3b82f6' }}>
+                <br />산정 금액 계산</span>까지 한번에!
             </FeatureHeadline>
             <FeatureDescription>
               업로드된 진단서와 영수증을 자동 분석해
