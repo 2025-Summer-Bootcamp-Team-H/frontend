@@ -39,12 +39,20 @@ const ImageBox = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
 `
 
 const Image = styled.img`
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  transition: transform 0.3s ease;
+  transform-origin: ${(props) =>
+    props.$mousePosition
+      ? `${props.$mousePosition.x}% ${props.$mousePosition.y}%`
+      : 'center'};
+  transform: ${(props) => (props.$isHovered ? 'scale(2)' : 'scale(1)')};
+  cursor: zoom-in;
 `
 
 const ContentWrapper = styled.div`
@@ -85,6 +93,8 @@ function ReceiptEdit() {
   const [error, setError] = useState(null)
   const [receiptId, setReceiptId] = useState(null)
   const [imageObjectURL, setImageObjectURL] = useState(null)
+  const [isHovered, setIsHovered] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -225,13 +235,27 @@ function ReceiptEdit() {
   }
 
   const handlePrevClick = () => {
-    navigate('/diagnosis_edit', {
-      state: {
-        diagnosisId: location.state?.diagnosisId,
-        diagnosisData: location.state?.diagnosisData,
-        receiptId: location.state?.receiptId,
-      },
-    })
+    navigate('/analysis')
+  }
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    // 이미지의 실제 크기에 대한 백분율로 계산
+    const xPercent = (x / rect.width) * 100
+    const yPercent = (y / rect.height) * 100
+
+    setMousePosition({ x: xPercent, y: yPercent })
   }
 
   if (loading && !receiptImage) {
@@ -328,7 +352,33 @@ function ReceiptEdit() {
               <SubTitle>병원 영수증</SubTitle>
               <ImageBox>
                 {receiptImage ? (
-                  <Image src={receiptImage} alt="병원 영수증" />
+                  <>
+                    <Image
+                      src={receiptImage}
+                      alt="병원 영수증"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                      onMouseMove={handleMouseMove}
+                      style={{ position: 'relative' }}
+                      $isHovered={isHovered}
+                      $mousePosition={mousePosition}
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '1rem',
+                        left: '1rem',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.8rem',
+                        fontFamily: 'Public Sans, sans-serif',
+                      }}
+                    >
+                      {isHovered ? '200%' : '100%'}
+                    </div>
+                  </>
                 ) : (
                   <LoadingText>이미지 로딩 중...</LoadingText>
                 )}
