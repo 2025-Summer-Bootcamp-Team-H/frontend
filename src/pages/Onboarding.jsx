@@ -13,7 +13,6 @@ import Customer from '../assets/Onboarding/Customer.png'
 import User from '../assets/Onboarding/User.png'
 import { useEffect, useState } from 'react'
 
-
 const PageWrapper = styled.div`
   width: 100vw;
   min-height: 100vh;
@@ -226,8 +225,8 @@ const ScrollIndicator = styled.div`
 
 // --- Section 2: Feature Highlights (White Background) ---
 const FeatureSection = styled.section`
-  min-height: 85svh;
-  padding: 32px 0;
+  min-height: 100svh;
+  padding: 0;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -239,11 +238,11 @@ const FeatureSection = styled.section`
 const FeatureBlock = styled.div`
   display: flex;
   align-items: center;
-  min-height: 85svh;
-  height: 85svh;
+  min-height: 100svh;
+  height: 100svh;
   max-width: 1200px;
   width: 85%;
-  gap: 32px;
+  gap: 40px;
   padding: 0 80px;
   margin: 0 auto;
   margin-bottom: 0;
@@ -264,8 +263,7 @@ const FeatureBlock = styled.div`
     flex-direction: row-reverse;
     padding: 0 80px;
     justify-content: flex-end;
-    margin-top: -420px;  // 두 번째 블록만 위로 올림
-    margin-right: 75px;
+    margin-top: -150px; // 두 번째 블록만 위로 올림
   }
 
   @media (max-width: 768px) {
@@ -281,11 +279,7 @@ const FeatureImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  margin-top: -160px;
-  height: 100%;
+  min-width: 600px;
 `
 
 const ImageContainer = styled.div`
@@ -320,10 +314,6 @@ const FeatureTextContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  justify-content: center;
 `
 
 const FeatureHeadline = styled.h2`
@@ -333,7 +323,7 @@ const FeatureHeadline = styled.h2`
   line-height: 1.2;
   margin-bottom: 1.5rem;
   white-space: nowrap;
-  margin-top: -50px;  // 위쪽 여백을 줄여서 위로 올림
+  margin-top: -50px; // 위쪽 여백을 줄여서 위로 올림
 `
 
 const FeatureDescription = styled.p`
@@ -341,7 +331,7 @@ const FeatureDescription = styled.p`
   color: #6b7280;
   line-height: 1.5;
   margin-bottom: 2rem;
-  margin-top: -20px;  // 위쪽 여백을 줄여서 위로 올림
+  margin-top: -20px; // 위쪽 여백을 줄여서 위로 올림
 `
 
 // --- Section 3: Dashboard Preview (Dark Blue Background) ---
@@ -350,11 +340,12 @@ const DashboardSection = styled.section`
   height: 1024px;
   width: 100vw;
   margin: 0;
-  background: linear-gradient(180deg, 
-    #3b82f6 0%, 
+  background: linear-gradient(
+    180deg,
+    #3b82f6 0%,
     #3b82f6 20%,
-    #1e40af 50%, 
-    #1e1e1e 80%, 
+    #1e40af 50%,
+    #1e1e1e 80%,
     #000000 100%
   );
   color: white;
@@ -394,7 +385,7 @@ const DashboardImageContainer = styled.div`
   border-radius: 12px;
   position: relative;
   background-color: #f8fafc;
-  
+
   img {
     width: 100%;
     height: 100%;
@@ -419,7 +410,8 @@ const DashboardTitle = styled.h2`
 // --- Section 4: Service Benefits/Testimonials (Dark Blue Background) ---
 const BenefitsSection = styled.section`
   padding: 80px 0;
-  background: linear-gradient(180deg, 
+  background: linear-gradient(
+    180deg,
     #000000 0%,
     #1e1e1e 10%,
     #1e40af 30%,
@@ -578,7 +570,9 @@ const SelectionCard = styled.div`
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.4), 0 8px 15px rgba(0, 0, 0, 0.15);
+    box-shadow:
+      0 15px 35px rgba(30, 58, 138, 0.4),
+      0 8px 15px rgba(0, 0, 0, 0.15);
   }
 
   @media (max-width: 768px) {
@@ -606,7 +600,7 @@ function Onboarding() {
   const [isDashboardVisible, setIsDashboardVisible] = useState(false)
   const [isSelectionVisible1, setIsSelectionVisible1] = useState(false)
   const [isSelectionVisible2, setIsSelectionVisible2] = useState(false)
-  
+
   useEffect(() => {
     const handleScroll = () => {
       // Feature Blocks 애니메이션 체크
@@ -615,7 +609,7 @@ function Onboarding() {
         const blockTop = block.getBoundingClientRect().top
         const blockBottom = block.getBoundingClientRect().bottom
         const windowHeight = window.innerHeight
-        
+
         if (blockTop < windowHeight * 0.75 && blockBottom > 0) {
           if (index === 0) setIsVisible1(true)
           if (index === 1) setIsVisible2(true)
@@ -630,7 +624,7 @@ function Onboarding() {
       if (dashboardSection) {
         const sectionTop = dashboardSection.getBoundingClientRect().top
         const sectionBottom = dashboardSection.getBoundingClientRect().bottom
-        
+
         if (sectionTop < window.innerHeight * 0.75 && sectionBottom > 0) {
           setIsDashboardVisible(true)
         } else {
@@ -643,7 +637,7 @@ function Onboarding() {
       selectionCards.forEach((card, index) => {
         const cardTop = card.getBoundingClientRect().top
         const cardBottom = card.getBoundingClientRect().bottom
-        
+
         if (cardTop < window.innerHeight * 0.75 && cardBottom > 0) {
           if (index === 0) setIsSelectionVisible1(true)
           if (index === 1) setTimeout(() => setIsSelectionVisible2(true), 400)
@@ -656,7 +650,7 @@ function Onboarding() {
 
     window.addEventListener('scroll', handleScroll)
     handleScroll()
-    
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -784,34 +778,41 @@ function Onboarding() {
 
       {/* Feature Highlights Section */}
       <FeatureSection>
-        <FeatureBlock className={`feature-block ${isVisible1 ? 'visible' : ''}`}>
-          <FeatureImageWrapper style={{ transform: 'translateX(-60px)' }}>
+        <FeatureBlock
+          className={`feature-block ${isVisible1 ? 'visible' : ''}`}
+        >
+          <FeatureImageWrapper>
             <ImageContainer src={Second} />
           </FeatureImageWrapper>
-          <FeatureTextContent style={{ marginLeft: '-210px' }}>
+          <FeatureTextContent>
             <FeatureHeadline>
-              <span style={{ color: '#3b82f6' }}>진단서와 영수증</span>만 업로드하면 끝!
+              <span style={{ color: '#3b82f6' }}>진단서와 영수증</span>만
+              업로드하면 끝!
               <br />
               복잡한 보험 청구, 이제 간편하게
             </FeatureHeadline>
             <FeatureDescription>
               진단서와 영수증 하나만 업로드하면,
-              <br />복잡한 서류 제출 없이
+              <br />
+              복잡한 서류 제출 없이
               <br />더 쉽고 빠르게 청구할 수 있습니다.
             </FeatureDescription>
           </FeatureTextContent>
         </FeatureBlock>
 
-        <FeatureBlock className={`feature-block ${isVisible2 ? 'visible' : ''}`}>
-          <FeatureImageWrapper style={{ transform: 'translateX(-110px)', marginTop: '10px' }}>
-            <ImageContainer src={Third} style={{ width: '1050px', height: '1000px' }} />
+        <FeatureBlock
+          className={`feature-block ${isVisible2 ? 'visible' : ''}`}
+        >
+          <FeatureImageWrapper>
+            <ImageContainer src={Third} />
           </FeatureImageWrapper>
-          <FeatureTextContent style={{ marginTop: '160px' }}>
+          <FeatureTextContent>
             <FeatureHeadline>
               업로드된 정보를 자동 분석하여
               <br />
-              <span style={{ color: '#3b82f6' }}>1차 보험 심사</span>부터 <span style={{ color: '#3b82f6' }}>
-                <br />산정 금액 계산</span>까지 한번에!
+              <span style={{ color: '#3b82f6' }}>1차 보험 심사</span>부터{' '}
+              <span style={{ color: '#3b82f6' }}>산정 금액 계산</span>까지
+              한번에!
             </FeatureHeadline>
             <FeatureDescription>
               업로드된 진단서와 영수증을 자동 분석해
@@ -844,7 +845,12 @@ function Onboarding() {
                 <span style={{ color: '#3b82f6' }}>관리 페이지</span>
               </h3>
               <DashboardImageContainer>
-                <img src={Management} alt="Management page" />
+                <img
+                  src={Management}
+                  alt="Management page"
+                  width="600"
+                  height="400"
+                />
               </DashboardImageContainer>
             </div>
             <div style={{ flex: 1, maxWidth: '600px' }}>
@@ -860,7 +866,12 @@ function Onboarding() {
                 <span style={{ color: '#3b82f6' }}>보험 산정 금액</span>
               </h3>
               <DashboardImageContainer>
-                <img src={Report} alt="Insurance report" />
+                <img
+                  src={Report}
+                  alt="Insurance report"
+                  width="600"
+                  height="400"
+                />
               </DashboardImageContainer>
             </div>
           </DashboardContent>
@@ -872,7 +883,8 @@ function Onboarding() {
         <BenefitsTitle>간편하고 편리한 보험 서비스</BenefitsTitle>
         <BenefitsSubtitle>
           많은 고객들과 보험사 직원들이 편리하게 사용한 Claim Bridge,
-          <br />어떤 점이 달랐을까요?
+          <br />
+          어떤 점이 달랐을까요?
         </BenefitsSubtitle>
         <div style={{ overflow: 'hidden', width: '100%' }}>
           <BenefitsCardsContainer>
@@ -890,6 +902,8 @@ function Onboarding() {
                   <img
                     src={YoungMan2}
                     alt="YoungMan2"
+                    width="30"
+                    height="40"
                     style={{ width: '30px', height: '40px' }}
                   />
                 </span>
@@ -908,6 +922,8 @@ function Onboarding() {
                   <img
                     src={YoungWoman}
                     alt="YoungWoman"
+                    width="30"
+                    height="40"
                     style={{ width: '30px', height: '40px' }}
                   />
                 </span>
@@ -928,6 +944,8 @@ function Onboarding() {
                   <img
                     src={OldMan}
                     alt="OldMan"
+                    width="30"
+                    height="40"
                     style={{ width: '30px', height: '40px' }}
                   />
                 </span>
@@ -947,6 +965,8 @@ function Onboarding() {
                   <img
                     src={YoungMan}
                     alt="YoungMan"
+                    width="30"
+                    height="40"
                     style={{ width: '30px', height: '40px' }}
                   />
                 </span>
@@ -1107,12 +1127,14 @@ function Onboarding() {
       <SelectionSection>
         <SelectionCardsContainer>
           <SelectionTitle>사용하실 서비스를 선택해주세요</SelectionTitle>
-          <div style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}>
-            <SelectionCard 
+          <div
+            style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
+          >
+            <SelectionCard
               className={`selection-card ${isSelectionVisible1 ? 'visible' : ''}`}
               onClick={() => navigate('/upload')}
             >
-              <img src={Customer} alt="Customer" />
+              <img src={Customer} alt="Customer" width="80" height="80" />
               <SelectionCardTitle>일반 사용자</SelectionCardTitle>
               <SelectionCardDescription>
                 진단서와 영수증 업로드로
@@ -1120,11 +1142,11 @@ function Onboarding() {
                 보험 청구 완료
               </SelectionCardDescription>
             </SelectionCard>
-            <SelectionCard 
+            <SelectionCard
               className={`selection-card ${isSelectionVisible2 ? 'visible' : ''}`}
               onClick={() => navigate('/login')}
             >
-              <img src={User} alt="User" />
+              <img src={User} alt="User" width="80" height="80" />
               <SelectionCardTitle>보험사 직원</SelectionCardTitle>
               <SelectionCardDescription>
                 자동화된 보험금 산정과
