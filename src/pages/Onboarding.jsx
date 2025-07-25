@@ -35,6 +35,10 @@ const HeroSection = styled.section`
   position: relative;
   padding: 0;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
 `
 
 const TopBar = styled.div`
@@ -50,6 +54,10 @@ const TopBar = styled.div`
   font-size: 1rem;
   font-weight: 500;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+  }
 `
 
 const Logo = styled.div`
@@ -58,12 +66,28 @@ const Logo = styled.div`
   gap: 8px;
   font-size: 1.5rem;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    gap: 6px;
+  }
+
+  .logo-text {
+    @media (max-width: 768px) {
+      font-size: 1.2rem !important;
+    }
+  }
 `
 
 const LogoImg = styled.img`
   height: 30px;
   margin-right: 8px;
   display: block;
+
+  @media (max-width: 768px) {
+    height: 24px;
+    margin-right: 6px;
+  }
 `
 
 const GetStartedButton = styled.button`
@@ -84,6 +108,12 @@ const GetStartedButton = styled.button`
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
     transform: translateY(-0.5px) scale(1.01);
   }
+
+  @media (max-width: 768px) {
+    padding: 6px 16px;
+    font-size: 0.9rem;
+    border-radius: 16px;
+  }
 `
 
 const HeroTitle = styled.h1`
@@ -93,6 +123,11 @@ const HeroTitle = styled.h1`
   letter-spacing: -2px;
   color: #1f2937;
   z-index: 10;
+
+  @media (max-width: 768px) {
+    font-size: 3em;
+    margin: 0 0 0.3em 0;
+  }
 `
 
 const HeroTitle2 = styled.h3`
@@ -102,6 +137,13 @@ const HeroTitle2 = styled.h3`
   letter-spacing: -2px;
   color: #374151;
   z-index: 10;
+
+  @media (max-width: 768px) {
+    font-size: 1.2em;
+    margin: 0 0 0.3em 0;
+    line-height: 1.3;
+    white-space: normal;
+  }
 `
 
 const HeroSubtitle = styled.p`
@@ -113,6 +155,11 @@ const HeroSubtitle = styled.p`
   bottom: 6rem;
   transform: translateX(-50%);
   z-index: 10;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    bottom: 4rem;
+  }
 `
 
 // 복잡한 SVG 블롭 모형 (이미지 스타일)
@@ -186,6 +233,11 @@ const PhotoBlob = styled.div`
       opacity: 0.3;
     }
   }
+
+  @media (max-width: 768px) {
+    width: 400px;
+    height: 400px;
+  }
 `
 
 const ScrollIndicator = styled.div`
@@ -219,6 +271,15 @@ const ScrollIndicator = styled.div`
     }
     60% {
       transform: translateY(-5px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    bottom: 1rem;
+
+    svg {
+      width: 30px;
+      height: 30px;
     }
   }
 `
@@ -271,6 +332,10 @@ const FeatureBlock = styled.div`
     text-align: center;
     padding: 0 20px;
     width: 95%;
+    height: auto;
+    min-height: auto;
+    gap: 20px;
+    margin-top: 0 !important;
   }
 `
 
@@ -280,6 +345,11 @@ const FeatureImageWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-width: 600px;
+
+  @media (max-width: 768px) {
+    min-width: auto;
+    width: 100%;
+  }
 `
 
 const ImageContainer = styled.div`
@@ -307,6 +377,11 @@ const ImageContainer = styled.div`
     background-position: center;
     z-index: 1;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 300px;
+  }
 `
 
 const FeatureTextContent = styled.div`
@@ -314,6 +389,10 @@ const FeatureTextContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
 `
 
 const FeatureHeadline = styled.h2`
@@ -324,6 +403,14 @@ const FeatureHeadline = styled.h2`
   margin-bottom: 1.5rem;
   white-space: nowrap;
   margin-top: -50px; // 위쪽 여백을 줄여서 위로 올림
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    white-space: normal;
+    line-height: 1.3;
+  }
 `
 
 const FeatureDescription = styled.p`
@@ -332,6 +419,13 @@ const FeatureDescription = styled.p`
   line-height: 1.5;
   margin-bottom: 2rem;
   margin-top: -20px; // 위쪽 여백을 줄여서 위로 올림
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
 `
 
 // --- Section 3: Dashboard Preview (Dark Blue Background) ---
@@ -359,6 +453,13 @@ const DashboardSection = styled.section`
   box-sizing: border-box;
   position: relative;
   z-index: 1;
+
+  @media (max-width: 768px) {
+    min-height: auto;
+    height: auto;
+    padding: 60px 20px;
+    gap: 30px;
+  }
 `
 
 const DashboardContainer = styled.div`
@@ -369,6 +470,11 @@ const DashboardContainer = styled.div`
   width: 95%;
   margin: 0 auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    padding: 30px 20px;
+    border-radius: 15px;
+  }
 `
 
 const DashboardContent = styled.div`
@@ -376,6 +482,11 @@ const DashboardContent = styled.div`
   gap: 50px;
   align-items: flex-start;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 30px;
+  }
 `
 
 const DashboardImageContainer = styled.div`
@@ -391,6 +502,11 @@ const DashboardImageContainer = styled.div`
     height: 100%;
     object-fit: contain;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 300px;
+  }
 `
 
 const DashboardTitle = styled.h2`
@@ -404,6 +520,11 @@ const DashboardTitle = styled.h2`
   &.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
   }
 `
 
@@ -423,12 +544,22 @@ const BenefitsSection = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 40px;
+
+  @media (max-width: 768px) {
+    padding: 60px 20px;
+    gap: 30px;
+  }
 `
 
 const BenefitsTitle = styled.h2`
   font-size: 2.8rem;
   font-weight: bold;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
 `
 
 const BenefitsSubtitle = styled.p`
@@ -436,6 +567,11 @@ const BenefitsSubtitle = styled.p`
   opacity: 0.8;
   max-width: 800px;
   line-height: 1.6;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
 `
 
 const BenefitsCardsContainer = styled.div`
@@ -464,6 +600,10 @@ const BenefitsCardsContainer = styled.div`
 
   @media (max-width: 768px) {
     gap: 15px;
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
   }
 `
 
@@ -482,6 +622,13 @@ const BenefitCard = styled.div`
   width: 280px;
   min-height: 280px;
   flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 350px;
+    padding: 20px 25px;
+    min-height: auto;
+  }
 `
 
 const BenefitCardTitle = styled.h3`
@@ -489,11 +636,20 @@ const BenefitCardTitle = styled.h3`
   font-weight: bold;
   color: #1f2937;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 `
 
 const BenefitText = styled.p`
   font-size: 1rem;
   line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
 `
 
 const BenefitAuthor = styled.div`
@@ -503,6 +659,11 @@ const BenefitAuthor = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    gap: 6px;
+  }
 `
 
 // --- Section 5: Service Selection (White Background) ---
@@ -513,6 +674,11 @@ const SelectionSection = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 40px;
+
+  @media (max-width: 768px) {
+    padding: 60px 20px;
+    gap: 30px;
+  }
 `
 
 const SelectionTitle = styled.h2`
@@ -521,6 +687,11 @@ const SelectionTitle = styled.h2`
   color: #1f2937;
   margin-bottom: 20px;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+  }
 `
 
 const SelectionCardsContainer = styled.div`
@@ -537,7 +708,9 @@ const SelectionCardsContainer = styled.div`
 
   @media (max-width: 768px) {
     align-items: center;
-    padding: 40px;
+    padding: 30px 20px;
+    gap: 30px;
+    width: 95%;
   }
 `
 
@@ -576,8 +749,14 @@ const SelectionCard = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 90%;
-    padding: 40px 30px;
+    width: 100%;
+    padding: 30px 25px;
+    min-width: auto;
+
+    img {
+      width: 80px;
+      margin-bottom: 15px;
+    }
   }
 `
 
@@ -585,12 +764,22 @@ const SelectionCardTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
 `
 
 const SelectionCardDescription = styled.p`
   font-size: 1rem;
   opacity: 0.9;
   line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
 `
 
 function Onboarding() {
@@ -754,6 +943,7 @@ function Onboarding() {
                 marginTop: '8px',
                 cursor: 'default',
               }}
+              className="logo-text"
             >
               ClaimBridge
             </span>
@@ -763,7 +953,11 @@ function Onboarding() {
           </GetStartedButton>
         </TopBar>
         <HeroTitle>Claim Bridge</HeroTitle>
-        <HeroTitle2>보험 업계의 새로운 패러다임을 열다</HeroTitle2>
+        <HeroTitle2>
+          보험 업계의 새로운
+          <br />
+          패러다임을 열다
+        </HeroTitle2>
         <ScrollIndicator onClick={handleScroll}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -812,6 +1006,7 @@ function Onboarding() {
               <br />
               <span style={{ color: '#3b82f6' }}>1차 보험 심사</span>부터{' '}
               <span style={{ color: '#3b82f6' }}>산정 금액 계산</span>까지
+              <br />
               한번에!
             </FeatureHeadline>
             <FeatureDescription>
