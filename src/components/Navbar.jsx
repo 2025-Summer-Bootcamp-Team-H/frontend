@@ -81,6 +81,23 @@ const StartButton = styled.button`
 function Navbar({ type = 'default' }) {
   const navigate = useNavigate()
 
+  const handleStartClick = () => {
+    // 현재 페이지가 Onboarding인지 확인
+    if (
+      window.location.pathname === '/onboarding' ||
+      window.location.pathname === '/'
+    ) {
+      // 페이지 맨 아래로 완전히 스크롤
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth',
+      })
+    } else {
+      // 다른 페이지에서는 Onboarding으로 이동
+      navigate('/onboarding')
+    }
+  }
+
   let menuItems = []
   if (type === 'default') {
     menuItems = [
@@ -132,7 +149,9 @@ function Navbar({ type = 'default' }) {
       </LogoBox>
       <Nav>
         {menuItems}
-        {type === 'user-logged-out' && <StartButton>Start</StartButton>}
+        {type === 'user-logged-out' && (
+          <StartButton onClick={handleStartClick}>Start</StartButton>
+        )}
       </Nav>
     </HeaderWrapper>
   )

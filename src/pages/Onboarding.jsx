@@ -135,9 +135,8 @@ const HeroTitle = styled.h1`
   }
 `
 
-const HeroTitle2 = styled.h3`
+const HeroTitle2 = styled.h5`
   font-size: 2em;
-  font-weight: bold;
   margin: 0 0 0.5em 0;
   letter-spacing: -2px;
   color: #374151;
@@ -329,7 +328,7 @@ const FeatureBlock = styled.div`
     flex-direction: row-reverse;
     padding: 0 80px;
     justify-content: flex-end;
-    margin-top: -420px;  // 두 번째 블록만 위로 올림
+    margin-top: -420px; // 두 번째 블록만 위로 올림
     margin-right: 75px;
   }
 
@@ -358,7 +357,7 @@ const FeatureImageWrapper = styled.div`
     margin-top: 0;
     margin-right: 0;
   }
-`;
+`
 
 const ImageContainer = styled.div`
   width: 40vw;
@@ -394,7 +393,7 @@ const ImageContainer = styled.div`
     max-width: 220px;
     max-height: 220px;
   }
-`;
+`
 
 const FeatureTextContent = styled.div`
   flex: 1;
@@ -453,11 +452,12 @@ const DashboardSection = styled.section`
   height: 1024px;
   width: 100vw;
   margin: 0;
-  background: linear-gradient(180deg, 
-    #3b82f6 0%, 
+  background: linear-gradient(
+    180deg,
+    #3b82f6 0%,
     #3b82f6 20%,
-    #1e40af 50%, 
-    #1e1e1e 80%, 
+    #1e40af 50%,
+    #1e1e1e 80%,
     #000000 100%
   );
   color: white;
@@ -488,14 +488,14 @@ const DashboardContainer = styled.div`
   width: 100%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
-`;
+`
 
 const DashboardContent = styled.div`
   display: flex;
   gap: 50px;
   align-items: flex-start;
   justify-content: center;
-`;
+`
 
 const DashboardImageContainer = styled.div`
   width: 600px;
@@ -504,13 +504,13 @@ const DashboardImageContainer = styled.div`
   border-radius: 12px;
   position: relative;
   background-color: #f8fafc;
-  
+
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
-`;
+`
 
 const DashboardTitle = styled.h2`
   font-size: 2.8rem;
@@ -524,12 +524,13 @@ const DashboardTitle = styled.h2`
     opacity: 1;
     transform: translateY(0);
   }
-`;
+`
 
 // --- Section 4: Service Benefits/Testimonials (Dark Blue Background) ---
 const BenefitsSection = styled.section`
   padding: 80px 0;
-  background: linear-gradient(180deg, 
+  background: linear-gradient(
+    180deg,
     #000000 0%,
     #1e1e1e 10%,
     #1e40af 30%,
@@ -541,13 +542,13 @@ const BenefitsSection = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 40px;
-`;
+`
 
 const BenefitsTitle = styled.h2`
   font-size: 3.2rem;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
 
   @media (max-width: 768px) {
     font-size: 1.8rem;
@@ -559,7 +560,7 @@ const BenefitsSubtitle = styled.p`
   font-size: 1.2rem;
   max-width: 800px;
   line-height: 1.6;
-  color: #FFFFFF;
+  color: #ffffff;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -682,7 +683,7 @@ const SelectionTitle = styled.h2`
   color: #162447;
   margin-bottom: 20px;
   text-align: center;
-`;
+`
 
 const SelectionCardsContainer = styled.div`
   display: flex;
@@ -700,7 +701,7 @@ const SelectionCardsContainer = styled.div`
     align-items: center;
     padding: 40px;
   }
-`;
+`
 
 const SelectionCard = styled.div`
   background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
@@ -733,14 +734,16 @@ const SelectionCard = styled.div`
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(30, 58, 138, 0.4), 0 8px 15px rgba(0, 0, 0, 0.15);
+    box-shadow:
+      0 15px 35px rgba(30, 58, 138, 0.4),
+      0 8px 15px rgba(0, 0, 0, 0.15);
   }
 
   @media (max-width: 768px) {
     width: 90%;
     padding: 40px 30px;
   }
-`;
+`
 
 const SelectionCardTitle = styled.h3`
   font-size: 1.5rem;
@@ -826,22 +829,31 @@ function Onboarding() {
   }, [])
 
   const handleGetStartedClick = () => {
-    navigate('/upload')
+    // 페이지 맨 아래로 완전히 스크롤
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    })
   }
 
   const handleScroll = () => {
-    const nextSection = document.querySelector('.feature-section')
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: 'smooth' })
-    }
+    // 페이지 맨 아래로 완전히 스크롤
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth',
+    })
   }
 
   return (
     <>
-      <TopBar style={{ 
-        backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'rgba(224, 242, 254, 0.95)',
-        color: isScrolled ? '#1f2937' : '#1f2937'
-      }}>
+      <TopBar
+        style={{
+          backgroundColor: isScrolled
+            ? 'rgba(255, 255, 255, 0.95)'
+            : 'rgba(224, 242, 254, 0.95)',
+          color: isScrolled ? '#1f2937' : '#1f2937',
+        }}
+      >
         <Logo>
           <LogoImg src={logo} alt="Logo" />
           <span className="logo-text">Claim Bridge</span>
@@ -924,11 +936,7 @@ function Onboarding() {
           </PhotoBlob>
 
           <HeroTitle>Claim Bridge</HeroTitle>
-          <HeroTitle2>
-            보험 업계의 새로운
-            <br />
-            패러다임을 열다
-          </HeroTitle2>
+          <HeroTitle2>보험 업계의 새로운 패러다임을 열다</HeroTitle2>
           <ScrollIndicator onClick={handleScroll}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -944,7 +952,9 @@ function Onboarding() {
         {/* Feature Highlights Section */}
         <FeatureSection>
           {/* 첫 번째 이미지 (진단서와 영수증) */}
-          <FeatureBlock className={`feature-block ${isVisible1 ? 'visible' : ''}`}>
+          <FeatureBlock
+            className={`feature-block ${isVisible1 ? 'visible' : ''}`}
+          >
             <FeatureImageWrapper>
               <ImageContainer>
                 <img src={Second} alt="진단서와 영수증" />
@@ -952,26 +962,38 @@ function Onboarding() {
             </FeatureImageWrapper>
             <FeatureTextContent style={{ marginLeft: '-40px' }}>
               <FeatureHeadline>
-                <span style={{ color: '#3b82f6' }}>진단서와 영수증</span>만 업로드하면 끝!
+                <span style={{ color: '#3b82f6' }}>진단서와 영수증</span>만
+                업로드하면 끝!
                 <br />
                 복잡한 보험 청구, 이제 간편하게
               </FeatureHeadline>
               <FeatureDescription>
                 진단서와 영수증 하나만 업로드하면,
-                <br />복잡한 서류 제출 없이
+                <br />
+                복잡한 서류 제출 없이
                 <br />더 쉽고 빠르게 청구할 수 있습니다.
               </FeatureDescription>
             </FeatureTextContent>
           </FeatureBlock>
 
           {/* 두 번째 이미지 (체크리스트) */}
-          <FeatureBlock className={`feature-block ${isVisible2 ? 'visible' : ''}`}>
-            <FeatureImageWrapper style={{ marginTop: '0px', marginRight: '-30px', marginLeft: '-120px' }}>
+          <FeatureBlock
+            className={`feature-block ${isVisible2 ? 'visible' : ''}`}
+          >
+            <FeatureImageWrapper
+              style={{
+                marginTop: '0px',
+                marginRight: '-30px',
+                marginLeft: '-120px',
+              }}
+            >
               <ImageContainer>
                 <img src={Third} alt="체크리스트" />
               </ImageContainer>
             </FeatureImageWrapper>
-            <FeatureTextContent style={{ marginTop: '100px', marginLeft: '30px' }}>
+            <FeatureTextContent
+              style={{ marginTop: '100px', marginLeft: '30px' }}
+            >
               <FeatureHeadline>
                 업로드된 정보를 자동 분석하여
                 <br />
@@ -1048,19 +1070,31 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>편리한 보험 청구</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;솔직히 보험 청구하는 거 진짜 귀찮았거든요. 근데 이건 그냥
-                  <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>진단서 사진 올리면 끝이라서 너무 편했어요</span>. 예전엔 뭔 서류가
-                  그렇게 많고 복잡했는지… 이제는 그런 거 없이도 <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>다 정리해주니까 시간도 아끼고</span>, 뭔가 내가 제대로 처리하고 있다는 확신도 들어요.&rdquo;
+                  &ldquo;솔직히 보험 청구하는 거 진짜 귀찮았거든요. 근데 이건
+                  그냥
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    진단서 사진 올리면 끝이라서 너무 편했어요
+                  </span>
+                  . 예전엔 뭔 서류가 그렇게 많고 복잡했는지… 이제는 그런 거
+                  없이도{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    다 정리해주니까 시간도 아끼고
+                  </span>
+                  , 뭔가 내가 제대로 처리하고 있다는 확신도 들어요.&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1078,13 +1112,20 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>정확한 산정 서비스</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;병원에서 받은 진단서만 올렸는데 알아서 텍스트로 변환해주고,
-                  OCR도 정확해서 놀랐어요. <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>나처럼 컴퓨터 잘 못하는 사람도 어렵지 않게 쓸 수 있어서 좋았어요</span>.&rdquo;
+                  &ldquo;병원에서 받은 진단서만 올렸는데 알아서 텍스트로
+                  변환해주고, OCR도 정확해서 놀랐어요.{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    나처럼 컴퓨터 잘 못하는 사람도 어렵지 않게 쓸 수 있어서
+                    좋았어요
+                  </span>
+                  .&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1102,15 +1143,21 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>업무 효율성 증가</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;이 시스템 쓰면서 확실히 업무 효율이 좋아졌어요. 진단서나
-                  영수증을 일일이 확인할 필요 없이, <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>OCR로 필요한 정보가 깔끔하게 들어오니까 확인만 하면 돼요</span>. 검색 기능도 잘 되어 있고, 청구 내역
-                  통계까지 바로 볼 수 있어서 한눈에 파악돼요. 특히 문제가 생기면
-                  슬랙으로 바로 알림 오는 게 진짜 편해요.&rdquo;
+                  &ldquo;이 시스템 쓰면서 확실히 업무 효율이 좋아졌어요.
+                  진단서나 영수증을 일일이 확인할 필요 없이,{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    OCR로 필요한 정보가 깔끔하게 들어오니까 확인만 하면 돼요
+                  </span>
+                  . 검색 기능도 잘 되어 있고, 청구 내역 통계까지 바로 볼 수
+                  있어서 한눈에 파악돼요. 특히 문제가 생기면 슬랙으로 바로 알림
+                  오는 게 진짜 편해요.&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1128,14 +1175,21 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>간편한 관리</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;청구 건수가 많아질수록 사람이 일일이 보는 데 한계가 있었는데,
-                  지금은 진단서나 영수증 정보가 깔끔하게 정리돼서 업무가 훨씬
-                  수월해졌습니다. 특히 위조 확인도 시스템적으로 되니까 <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>검토 시간도 줄고 실수도 줄었어요</span>.&rdquo;
+                  &ldquo;청구 건수가 많아질수록 사람이 일일이 보는 데 한계가
+                  있었는데, 지금은 진단서나 영수증 정보가 깔끔하게 정리돼서
+                  업무가 훨씬 수월해졌습니다. 특히 위조 확인도 시스템적으로
+                  되니까{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    검토 시간도 줄고 실수도 줄었어요
+                  </span>
+                  .&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1154,12 +1208,17 @@ function Onboarding() {
                 <BenefitCardTitle>직관적인 인터페이스</BenefitCardTitle>
                 <BenefitText>
                   처음 이용했는데도 어떤 버튼을 눌러야 할지 한눈에 보였어요.
-                  <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>복잡한 설명 없이도 그냥 따라가기만 하면 됐어요</span>.
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    복잡한 설명 없이도 그냥 따라가기만 하면 됐어요
+                  </span>
+                  .
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1175,13 +1234,18 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>가족 보험도 한 번에</BenefitCardTitle>
                 <BenefitText>
-                  저 혼자뿐만 아니라 <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>가족 명의 보험도 함께 처리할 수 있어서</span> 부모님
-                  것도 한 번에 챙기기 편했어요.
+                  저 혼자뿐만 아니라{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    가족 명의 보험도 함께 처리할 수 있어서
+                  </span>{' '}
+                  부모님 것도 한 번에 챙기기 편했어요.
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1194,24 +1258,36 @@ function Onboarding() {
                   <span style={{ fontWeight: 'bold' }}>20대 여성 김다현</span>
                 </BenefitAuthor>
               </BenefitCard>
-              
+
               {/* 두 번째 세트 (복제) */}
               <BenefitCard>
                 <BenefitCardTitle>편리한 보험 청구</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;솔직히 보험 청구하는 거 진짜 귀찮았거든요. 근데 이건 그냥
-                  <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>진단서 사진 올리면 끝이라서 너무 편했어요</span>. 예전엔 뭔 서류가
-                  그렇게 많고 복잡했는지… 이제는 그런 거 없이도 <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>다 정리해주니까 시간도 아끼고</span>, 뭔가 내가 제대로 처리하고 있다는 확신도 들어요.&rdquo;
+                  &ldquo;솔직히 보험 청구하는 거 진짜 귀찮았거든요. 근데 이건
+                  그냥
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    진단서 사진 올리면 끝이라서 너무 편했어요
+                  </span>
+                  . 예전엔 뭔 서류가 그렇게 많고 복잡했는지… 이제는 그런 거
+                  없이도{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    다 정리해주니까 시간도 아끼고
+                  </span>
+                  , 뭔가 내가 제대로 처리하고 있다는 확신도 들어요.&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1229,13 +1305,20 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>정확한 산정 서비스</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;병원에서 받은 진단서만 올렸는데 알아서 텍스트로 변환해주고,
-                  OCR도 정확해서 놀랐어요. <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>나처럼 컴퓨터 잘 못하는 사람도 어렵지 않게 쓸 수 있어서 좋았어요</span>.&rdquo;
+                  &ldquo;병원에서 받은 진단서만 올렸는데 알아서 텍스트로
+                  변환해주고, OCR도 정확해서 놀랐어요.{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    나처럼 컴퓨터 잘 못하는 사람도 어렵지 않게 쓸 수 있어서
+                    좋았어요
+                  </span>
+                  .&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1253,15 +1336,21 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>업무 효율성 증가</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;이 시스템 쓰면서 확실히 업무 효율이 좋아졌어요. 진단서나
-                  영수증을 일일이 확인할 필요 없이, <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>OCR로 필요한 정보가 깔끔하게 들어오니까 확인만 하면 돼요</span>. 검색 기능도 잘 되어 있고, 청구 내역
-                  통계까지 바로 볼 수 있어서 한눈에 파악돼요. 특히 문제가 생기면
-                  슬랙으로 바로 알림 오는 게 진짜 편해요.&rdquo;
+                  &ldquo;이 시스템 쓰면서 확실히 업무 효율이 좋아졌어요.
+                  진단서나 영수증을 일일이 확인할 필요 없이,{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    OCR로 필요한 정보가 깔끔하게 들어오니까 확인만 하면 돼요
+                  </span>
+                  . 검색 기능도 잘 되어 있고, 청구 내역 통계까지 바로 볼 수
+                  있어서 한눈에 파악돼요. 특히 문제가 생기면 슬랙으로 바로 알림
+                  오는 게 진짜 편해요.&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1279,14 +1368,21 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>간편한 관리</BenefitCardTitle>
                 <BenefitText>
-                  &ldquo;청구 건수가 많아질수록 사람이 일일이 보는 데 한계가 있었는데,
-                  지금은 진단서나 영수증 정보가 깔끔하게 정리돼서 업무가 훨씬
-                  수월해졌습니다. 특히 위조 확인도 시스템적으로 되니까 <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>검토 시간도 줄고 실수도 줄었어요</span>.&rdquo;
+                  &ldquo;청구 건수가 많아질수록 사람이 일일이 보는 데 한계가
+                  있었는데, 지금은 진단서나 영수증 정보가 깔끔하게 정리돼서
+                  업무가 훨씬 수월해졌습니다. 특히 위조 확인도 시스템적으로
+                  되니까{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    검토 시간도 줄고 실수도 줄었어요
+                  </span>
+                  .&rdquo;
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1305,12 +1401,17 @@ function Onboarding() {
                 <BenefitCardTitle>직관적인 인터페이스</BenefitCardTitle>
                 <BenefitText>
                   처음 이용했는데도 어떤 버튼을 눌러야 할지 한눈에 보였어요.
-                  <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>복잡한 설명 없이도 그냥 따라가기만 하면 됐어요</span>.
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    복잡한 설명 없이도 그냥 따라가기만 하면 됐어요
+                  </span>
+                  .
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1326,13 +1427,18 @@ function Onboarding() {
               <BenefitCard>
                 <BenefitCardTitle>가족 보험도 한 번에</BenefitCardTitle>
                 <BenefitText>
-                  저 혼자뿐만 아니라 <span style={{ 
-                    fontWeight: 'bold', 
-                    backgroundColor: '#e0f2fe', 
-                    padding: '2px 4px',
-                    borderRadius: '3px'
-                  }}>가족 명의 보험도 함께 처리할 수 있어서</span> 부모님
-                  것도 한 번에 챙기기 편했어요.
+                  저 혼자뿐만 아니라{' '}
+                  <span
+                    style={{
+                      fontWeight: 'bold',
+                      backgroundColor: '#e0f2fe',
+                      padding: '2px 4px',
+                      borderRadius: '3px',
+                    }}
+                  >
+                    가족 명의 보험도 함께 처리할 수 있어서
+                  </span>{' '}
+                  부모님 것도 한 번에 챙기기 편했어요.
                 </BenefitText>
                 <BenefitAuthor>
                   <span>
@@ -1350,7 +1456,7 @@ function Onboarding() {
         </BenefitsSection>
 
         {/* Service Selection Section */}
-        <SelectionSection>
+        <SelectionSection className="selection-section">
           <SelectionCardsContainer>
             <SelectionTitle>사용하실 서비스를 선택해주세요</SelectionTitle>
             <div
