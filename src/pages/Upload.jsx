@@ -34,6 +34,42 @@ const Box = styled.div`
   position: relative;
   overflow: hidden;
   padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.05),
+      rgba(29, 78, 216, 0.05)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
 `
 
 const UploadedImage = styled.img`
@@ -50,17 +86,80 @@ const FileInput = styled.input`
 const Button = styled.button`
   width: clamp(80px, 20vw, 100px);
   height: clamp(28px, 6vw, 30px);
-  background-color: #c5defd;
-  color: #000000;
+  background: #3182f6;
+  color: #ffffff;
   border-radius: 10px;
   border: none;
   cursor: pointer;
   font-family: 'Public Sans';
   font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  animation: pulse 2s infinite;
+
+  &:hover {
+    background: #2563eb;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    animation: none;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+  }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    animation: none;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::before {
+    opacity: 0;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+    }
+    100% {
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
   }
 `
 
@@ -71,6 +170,11 @@ const Title = styled.h2`
   color: #000000;
   margin: 0.5rem 0;
   text-align: center;
+  transition: color 0.3s ease;
+
+  ${Box}:hover & {
+    color: #3b82f6;
+  }
 `
 
 const TitleH1 = styled.h1`
@@ -90,9 +194,14 @@ const Info = styled.p`
   font-family: 'Public Sans';
   margin: 0 0 1rem 0;
   text-align: center;
+  transition: color 0.3s ease;
 
   @media (max-width: 768px) {
     margin: 0 0 0.5rem 0;
+  }
+
+  ${Box}:hover & {
+    color: #3b82f6;
   }
 `
 
