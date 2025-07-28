@@ -183,11 +183,6 @@ const TrendAmount = styled.div`
   color: #000;
 `
 
-const TrendRate = styled.div`
-  color: #10b981;
-  font-size: 0.875rem;
-`
-
 const TextContent = styled.p`
   color: #6b7280;
   line-height: 1.6;
@@ -402,7 +397,6 @@ function Report() {
       const amount = claimData?.claim_amount || 0
       return `₩${amount.toLocaleString()}`
     })(),
-    annualRate: '+3%', // 기본값
   }
 
   // 차트 데이터 생성 - 해당 환자의 전체 청구 내역 기반
@@ -415,8 +409,11 @@ function Report() {
           claimData?.approval_stats?.passed || 0,
           claimData?.approval_stats?.failed || 0,
         ],
-        backgroundColor: ['#4CAF50', '#F44336'],
-        borderColor: ['#45a049', '#da190b'],
+        backgroundColor: [
+          'rgba(16, 185, 129, 0.3)',
+          'rgba(248, 113, 113, 0.3)',
+        ],
+        borderColor: ['#059669', '#ef4444'],
         borderWidth: 2,
       },
     ],
@@ -425,17 +422,21 @@ function Report() {
   // 2. 월별 보험료 변화 라인 차트 - claim_history 기반
   const monthlyTrendData = {
     labels:
-      claimData?.claim_history?.map((claim) =>
-        new Date(claim.created_at).toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: 'short',
-        }),
-      ) || [],
+      claimData?.claim_history
+        ?.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+        ?.map((claim) =>
+          new Date(claim.created_at).toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'short',
+          }),
+        ) || [],
     datasets: [
       {
         label: '청구 금액 (원)',
         data:
-          claimData?.claim_history?.map((claim) => claim.claim_amount) || [],
+          claimData?.claim_history
+            ?.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+            ?.map((claim) => claim.claim_amount) || [],
         borderColor: '#2196F3',
         backgroundColor: 'rgba(33, 150, 243, 0.1)',
         borderWidth: 2,
@@ -448,15 +449,20 @@ function Report() {
   // 3. 진단별 청구 금액 바 차트 - claim_history 기반
   const diagnosisAmountData = {
     labels:
-      claimData?.claim_history?.map((claim) => claim.diagnosis_name) || [],
+      claimData?.claim_history?.map((claim) => {
+        const diagnosisName = claim.diagnosis_name
+        return diagnosisName.length > 6
+          ? diagnosisName.substring(0, 6) + '...'
+          : diagnosisName
+      }) || [],
     datasets: [
       {
         label: '청구 금액 (원)',
         data:
           claimData?.claim_history?.map((claim) => claim.claim_amount) || [],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
+        backgroundColor: 'rgba(167, 139, 250, 0.3)',
+        borderColor: 'rgba(167, 139, 250, 1)',
+        borderWidth: 2,
       },
     ],
   }
@@ -467,6 +473,28 @@ function Report() {
     plugins: {
       legend: {
         position: 'top',
+        onClick: () => {
+          // 범례 클릭 시 아무 동작 안함
+          return false
+        },
+      },
+    },
+    onClick: (e) => {
+      e.stopPropagation()
+    },
+    onHover: (e) => {
+      e.native.target.style.cursor = 'default'
+    },
+    elements: {
+      arc: {
+        hoverBackgroundColor: (context) => {
+          const index = context.dataIndex
+          return index === 0 ? '#059669' : '#ef4444'
+        },
+        hoverBorderColor: (context) => {
+          const index = context.dataIndex
+          return index === 0 ? '#047857' : '#dc2626'
+        },
       },
     },
   }
@@ -493,6 +521,34 @@ function Report() {
         ticks: {
           callback: function (value) {
             return '₩' + value.toLocaleString()
+          },
+        },
+      },
+      x: {
+        ticks: {
+          callback: function (value, index) {
+            const originalLabel =
+              claimData?.claim_history?.[index]?.diagnosis_name || ''
+            return originalLabel.length > 6
+              ? originalLabel.substring(0, 6) + '...'
+              : originalLabel
+          },
+        },
+      },
+    },
+    plugins: {
+      ...chartOptions.plugins,
+      tooltip: {
+        enabled: true,
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          title: function (context) {
+            const index = context[0].dataIndex
+            return claimData?.claim_history?.[index]?.diagnosis_name || ''
+          },
+          label: function (context) {
+            return '청구 금액: ₩' + context.parsed.y.toLocaleString()
           },
         },
       },
@@ -576,7 +632,6 @@ function Report() {
           <TrendContainer>
             <TrendInfo>
               <TrendAmount>{currentCustomer.calculatedAmount}</TrendAmount>
-              <TrendRate>Annual {currentCustomer.annualRate}</TrendRate>
             </TrendInfo>
           </TrendContainer>
           <div style={{ height: '300px', marginTop: '1rem' }}>
@@ -603,8 +658,47 @@ function Report() {
         <Section>
           <SectionTitle>심사 근거 및 조항 해석</SectionTitle>
           <TextContent>
-            {claimData?.review_basis ||
-              '보험료 산정 기준(연령, 직업, 건강 보장 금액)과 기존 질환 관련 특약(12개월 대기 기간 후 보장)에 대한 설명입니다. 신청자의 건강 상태와 보험 가입 조건을 종합적으로 검토하여 위의 금액으로 산정되었습니다.'}
+            {(() => {
+              const reviewText =
+                claimData?.review_basis ||
+                '진단명: 골절, 치료방법: 수술, 입원일수: 0일'
+              const parts = reviewText.split(', ')
+
+              return (
+                <>
+                  {parts.map((part, index) => {
+                    if (part.includes('진단명:')) {
+                      return (
+                        <div key={index} style={{ marginBottom: '1rem' }}>
+                          <strong>진단명:</strong>{' '}
+                          {part.replace('진단명:', '').trim()}
+                        </div>
+                      )
+                    } else if (part.includes('치료방법:')) {
+                      return (
+                        <div key={index} style={{ marginBottom: '1rem' }}>
+                          <strong>치료방법:</strong>{' '}
+                          {part.replace('치료방법:', '').trim()}
+                        </div>
+                      )
+                    } else if (part.includes('입원일수:')) {
+                      return (
+                        <div key={index} style={{ marginBottom: '1rem' }}>
+                          <strong>입원일수:</strong>{' '}
+                          {part.replace('입원일수:', '').trim()}
+                        </div>
+                      )
+                    } else {
+                      return (
+                        <div key={index} style={{ marginTop: '1.5rem' }}>
+                          {part}
+                        </div>
+                      )
+                    }
+                  })}
+                </>
+              )
+            })()}
           </TextContent>
         </Section>
       </CustomContainer>
