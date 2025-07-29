@@ -3,9 +3,10 @@ import Navbar from '../components/Navbar'
 import styled from 'styled-components'
 import BigBtn from '../components/buttons/Bigbtn'
 import { useNavigate } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { diagnosisAPI, receiptAPI, forgeryAPI } from '../services'
 import LoadingOverlay from '../components/LoadingOverlay'
+import hospitalImg from '../assets/Upload/hospital.png'
 
 const Text = styled.p`
   font-size: clamp(0.875rem, 2.5vw, 1rem);
@@ -221,21 +222,32 @@ const TopSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-bottom: 1rem;
 `
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
-  height: 7px;
-  background: #f2f4f6;
-  overflow: hidden;
-  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 0;
 `
 
-const Progress = styled.div`
-  width: 20%;
+const ProgressBar = styled.div`
+  width: 60%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+`
+
+const ProgressFill = styled.div`
   height: 100%;
-  background: #1778fb;
-  transition: width 0.3s;
+  width: 20%;
+  background-color: #3182F6;
+  border-radius: 4px;
+  transition: width 0.3s ease;
 `
 
 function Upload() {
@@ -253,6 +265,18 @@ function Upload() {
   const [diagnosisId, setDiagnosisId] = useState(null)
   const [receiptId, setReceiptId] = useState(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [hospitalPos, setHospitalPos] = useState('-340px');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHospitalPos('-200px');
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    console.log('hospitalPos:', hospitalPos);
+  }, [hospitalPos]);
 
   const handleDiagnosisUpload = async (event) => {
     const file = event.target.files[0]
@@ -395,10 +419,30 @@ function Upload() {
         text="문서를 분석하고 있습니다. 잠시만 기다려주세요."
       />
       <Navbar />
-      <ProgressBarWrapper>
-        <Progress />
-      </ProgressBarWrapper>
-      <Container>
+      <div style={{ position: 'relative', width: '100%', marginTop: '48px', marginBottom: '2rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <ProgressBarWrapper style={{ flex: 1, maxWidth: '1200px' }}>
+          <div style={{ maxWidth: '1200px', width: '100%' }}>
+            <ProgressBar>
+              <ProgressFill />
+            </ProgressBar>
+          </div>
+        </ProgressBarWrapper>
+        <img
+          src={hospitalImg}
+          alt="병원 아이콘"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            transform: `translateX(calc(-50% + ${hospitalPos}))`,
+            top: '-20px',
+            width: '38px',
+            height: '38px',
+            zIndex: 10,
+            transition: 'transform 0.8s cubic-bezier(0.4,0,0.2,1)'
+          }}
+        />
+      </div>
+      <Container style={{ marginTop: '48px' }}>
         <ContentWrapper>
           <TopSection>
             <TitleH1>진단서와 영수증 업로드 하기</TitleH1>
