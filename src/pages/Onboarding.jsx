@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import logo from '../assets/Onboarding/logo.png'
 import Second from '../assets/Onboarding/Second.png'
 import Third from '../assets/Onboarding/Third.png'
-import Management from '../assets/Onboarding/Management.png'
-import Report from '../assets/Onboarding/Report.png'
 import YoungMan from '../assets/Onboarding/YoungMan.png'
 import YoungWoman from '../assets/Onboarding/YoungWoman.png'
 import OldMan from '../assets/Onboarding/OldMan.png'
@@ -12,6 +10,8 @@ import YoungMan2 from '../assets/Onboarding/YoungMan2.png'
 import Customer from '../assets/Onboarding/Customer.png'
 import User from '../assets/Onboarding/User.png'
 import { useEffect, useState } from 'react'
+import Management1 from '../assets/Onboarding/Management1.png'
+import Report1 from '../assets/Onboarding/Report1.png'
 
 const PageWrapper = styled.div`
   width: 100vw;
@@ -503,7 +503,7 @@ const DashboardImageContainer = styled.div`
   overflow: hidden;
   border-radius: 12px;
   position: relative;
-  background-color: #f8fafc;
+  background-color: #ffffff;
 
   img {
     width: 100%;
@@ -1033,7 +1033,7 @@ function Onboarding() {
                   <span style={{ color: '#3b82f6' }}>관리 페이지</span>
                 </h3>
                 <DashboardImageContainer>
-                  <img src={Management} alt="Management page" />
+                  <img src={Management1} alt="Management page" />
                 </DashboardImageContainer>
               </div>
               <div style={{ flex: 1, maxWidth: '600px' }}>
@@ -1049,7 +1049,7 @@ function Onboarding() {
                   <span style={{ color: '#3b82f6' }}>보험 산정 금액</span>
                 </h3>
                 <DashboardImageContainer>
-                  <img src={Report} alt="Insurance report" />
+                  <img src={Report1} alt="Insurance report" />
                 </DashboardImageContainer>
               </div>
             </DashboardContent>
