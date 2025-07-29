@@ -17,22 +17,21 @@ function App() {
       <GlobalStyle />
       <Routes>
         {/* 루트 경로 - 기본 페이지로 리다이렉트 */}
-        <Route path="/" element={<Navigate to="/Onboarding" replace />} />
+        <Route path="/" element={<Navigate to="/onboarding" replace />} />
 
-        <Route path="/Onboarding" element={<Onboarding />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Upload" element={<Upload />} />
-        <Route path="/Receipt_edit" element={<Receipt_edit />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/upload" element={<Upload />} />
         <Route path="/receipt_edit" element={<Receipt_edit />} />
-        <Route path="/Complete" element={<Complete />} />
-        <Route path="/Analysis" element={<Analysis />} />
-        <Route path="/Diagnosis_edit" element={<Diagnosis_edit />} />
-        <Route path="/Signup" element={<Signup />} />
-        <Route path="/Management" element={<Management />} />
+        <Route path="/complete" element={<Complete />} />
+        <Route path="/analysis" element={<Analysis />} />
+        <Route path="/diagnosis_edit" element={<Diagnosis_edit />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/management" element={<Management />} />
         <Route path="/report" element={<Report />} />
         <Route path="/report/:id" element={<Report />} />
 
-        <Route path="*" element={<Navigate to="/Onboarding" replace />} />
+        <Route path="*" element={<Navigate to="/onboarding" replace />} />
       </Routes>
     </BrowserRouter>
   )
