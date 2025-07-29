@@ -226,18 +226,19 @@ const TopSection = styled.div`
 `
 
 const ProgressBarWrapper = styled.div`
-  width: 100%;
+  width: 70vw;
   display: flex;
   align-items: center;
   padding: 0;
   margin-bottom: 0;
+  box-sizing: border-box;
 `
 
 const ProgressBar = styled.div`
   width: 100%;
-  height: 8px;
+  height: clamp(6px, 1.5vw, 8px);
   background-color: #e5e7eb;
-  border-radius: 4px;
+  border-radius: clamp(3px, 0.75vw, 4px);
   overflow: hidden;
   position: relative;
 `
@@ -246,7 +247,7 @@ const ProgressFill = styled.div`
   height: 100%;
   width: 20%;
   background-color: #3182f6;
-  border-radius: 4px;
+  border-radius: clamp(3px, 0.75vw, 4px);
   transition: width 1.5s ease;
 `
 
@@ -430,8 +431,7 @@ function Upload() {
       >
         <ProgressBarWrapper
           style={{
-            width: '100%',
-            maxWidth: '900px',
+            width: '60vw',
             display: 'flex',
             justifyContent: 'center',
             margin: '0 auto',
