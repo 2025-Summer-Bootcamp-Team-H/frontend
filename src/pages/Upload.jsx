@@ -245,7 +245,7 @@ const ProgressBar = styled.div`
 const ProgressFill = styled.div`
   height: 100%;
   width: 20%;
-  background-color: #3182F6;
+  background-color: #3182f6;
   border-radius: 4px;
   transition: width 0.3s ease;
 `
@@ -265,18 +265,18 @@ function Upload() {
   const [diagnosisId, setDiagnosisId] = useState(null)
   const [receiptId, setReceiptId] = useState(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [hospitalPos, setHospitalPos] = useState('-340px');
+  const [hospitalPos, setHospitalPos] = useState('-340px')
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setHospitalPos('-200px');
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
+      setHospitalPos('-200px')
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
-    console.log('hospitalPos:', hospitalPos);
-  }, [hospitalPos]);
+    console.log('hospitalPos:', hospitalPos)
+  }, [hospitalPos])
 
   const handleDiagnosisUpload = async (event) => {
     const file = event.target.files[0]
@@ -419,7 +419,17 @@ function Upload() {
         text="문서를 분석하고 있습니다. 잠시만 기다려주세요."
       />
       <Navbar />
-      <div style={{ position: 'relative', width: '100%', marginTop: '48px', marginBottom: '2rem', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          marginTop: '48px',
+          marginBottom: '2rem',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+        }}
+      >
         <ProgressBarWrapper style={{ flex: 1, maxWidth: '1200px' }}>
           <div style={{ maxWidth: '1200px', width: '100%' }}>
             <ProgressBar>
@@ -438,7 +448,7 @@ function Upload() {
             width: '38px',
             height: '38px',
             zIndex: 10,
-            transition: 'transform 0.8s cubic-bezier(0.4,0,0.2,1)'
+            transition: 'transform 0.8s cubic-bezier(0.4,0,0.2,1)',
           }}
         />
       </div>

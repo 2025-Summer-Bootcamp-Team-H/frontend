@@ -123,7 +123,7 @@ const GetStartedButton = styled.button`
 
 const HeroTitle = styled.h1`
   font-size: 7em;
-  font-weight: 600;
+  font-weight: 650;
   margin: 0 0 0.5em 0;
   letter-spacing: -2px;
   color: #1f2937;
@@ -136,7 +136,7 @@ const HeroTitle = styled.h1`
 `
 
 const HeroTitle2 = styled.h5`
-  font-size: 2em;
+  font-size: 1.7em;
   margin: 0 0 0.5em 0;
   letter-spacing: -2px;
   color: #374151;
@@ -936,7 +936,7 @@ function Onboarding() {
           </PhotoBlob>
 
           <HeroTitle>Claim Bridge</HeroTitle>
-          <HeroTitle2>보험 업계의 새로운 패러다임을 열다</HeroTitle2>
+          <HeroTitle2>보험 1차 심사의 패러다임을 바꾼 자동화 시스템</HeroTitle2>
           <ScrollIndicator onClick={handleScroll}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
