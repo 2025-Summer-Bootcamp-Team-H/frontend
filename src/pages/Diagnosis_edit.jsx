@@ -6,20 +6,33 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { diagnosisAPI } from '../services'
 import LoadingOverlay from '../components/LoadingOverlay'
+import hospitalImg from '../assets/Upload/hospital.png'
+import bedImg from '../assets/Upload/bed.png'
+import wheelChairImg from '../assets/Upload/wheelchair.png'
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
-  height: 7px;
-  background: #f2f4f6;
-  overflow: hidden;
-  margin-bottom: 2.5vh;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 0;
 `
 
-const Progress = styled.div`
-  width: 60%;
+const ProgressBar = styled.div`
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+`
+
+const ProgressFill = styled.div`
   height: 100%;
-  background: #3182f6;
-  transition: width 0.3s;
+  width: 60%;
+  background-color: #3182f6;
+  border-radius: 4px;
+  transition: width 1.5s ease;
 `
 const SubTitle = styled.h2`
   font-size: 1.3vw;
@@ -64,7 +77,7 @@ const ContentWrapper = styled.div`
 `
 const CustomContainer = styled(Container)`
   margin: 2vh auto;
-  margin-top: 7vh;
+  margin-top: 48px;
 `
 
 const LoadingText = styled.div`
@@ -101,6 +114,8 @@ function DiagnosisEdit() {
   const [diagnosisId, setDiagnosisId] = useState(null)
   const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [hospitalPos, setHospitalPos] = useState('43%')
+  const [progressWidth, setProgressWidth] = useState('40%')
   const hasInitialized = useRef(false)
 
   useEffect(() => {
@@ -125,6 +140,14 @@ function DiagnosisEdit() {
       }
     }
   }, [imageObjectURL])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHospitalPos('55%')
+      setProgressWidth('60%')
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // 병렬 처리 + 점진적 로딩
   const loadDiagnosisData = async (id) => {
@@ -265,9 +288,68 @@ function DiagnosisEdit() {
           text="잠시만 기다려주세요."
         />
         <Navbar />
-        <ProgressBarWrapper>
-          <Progress />
-        </ProgressBarWrapper>
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            marginTop: '48px',
+            marginBottom: '2rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ProgressBarWrapper
+            style={{
+              width: '100%',
+              maxWidth: '900px',
+              display: 'flex',
+              justifyContent: 'center',
+              margin: '0 auto',
+            }}
+          >
+            <ProgressBar>
+              <ProgressFill style={{ width: progressWidth }} />
+            </ProgressBar>
+          </ProgressBarWrapper>
+          <img
+            src={hospitalImg}
+            alt="병원 아이콘"
+            style={{
+              position: 'absolute',
+              left: '30%',
+              top: '-20px',
+              width: '38px',
+              height: '38px',
+              zIndex: 10,
+            }}
+          />
+          <img
+            src={bedImg}
+            alt="병원 아이콘"
+            style={{
+              position: 'absolute',
+              left: '43%',
+              top: '-20px',
+              width: '38px',
+              height: '38px',
+              zIndex: 10,
+            }}
+          />
+          <img
+            src={wheelChairImg}
+            alt="병원 아이콘"
+            style={{
+              position: 'absolute',
+              left: hospitalPos,
+              top: '-20px',
+              width: '38px',
+              height: '38px',
+              zIndex: 9,
+              transition: 'left 1.5s ease',
+            }}
+          />
+        </div>
         <CustomContainer>
           <ContentWrapper>
             <div
@@ -314,9 +396,68 @@ function DiagnosisEdit() {
     return (
       <div>
         <Navbar />
-        <ProgressBarWrapper>
-          <Progress />
-        </ProgressBarWrapper>
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            marginTop: '48px',
+            marginBottom: '2rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ProgressBarWrapper
+            style={{
+              width: '100%',
+              maxWidth: '900px',
+              display: 'flex',
+              justifyContent: 'center',
+              margin: '0 auto',
+            }}
+          >
+            <ProgressBar>
+              <ProgressFill style={{ width: progressWidth }} />
+            </ProgressBar>
+          </ProgressBarWrapper>
+          <img
+            src={hospitalImg}
+            alt="병원 아이콘"
+            style={{
+              position: 'absolute',
+              left: '30%',
+              top: '-20px',
+              width: '38px',
+              height: '38px',
+              zIndex: 10,
+            }}
+          />
+          <img
+            src={bedImg}
+            alt="병원 아이콘"
+            style={{
+              position: 'absolute',
+              left: '43%',
+              top: '-20px',
+              width: '38px',
+              height: '38px',
+              zIndex: 10,
+            }}
+          />
+          <img
+            src={wheelChairImg}
+            alt="병원 아이콘"
+            style={{
+              position: 'absolute',
+              left: hospitalPos,
+              top: '-20px',
+              width: '38px',
+              height: '38px',
+              zIndex: 9,
+              transition: 'left 1.5s ease',
+            }}
+          />
+        </div>
         <CustomContainer>
           <ErrorText>{error}</ErrorText>
         </CustomContainer>
@@ -332,9 +473,68 @@ function DiagnosisEdit() {
         text="잠시만 기다려주세요."
       />
       <Navbar />
-      <ProgressBarWrapper>
-        <Progress />
-      </ProgressBarWrapper>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          marginTop: '48px',
+          marginBottom: '2rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ProgressBarWrapper
+          style={{
+            width: '100%',
+            maxWidth: '900px',
+            display: 'flex',
+            justifyContent: 'center',
+            margin: '0 auto',
+          }}
+        >
+          <ProgressBar>
+            <ProgressFill />
+          </ProgressBar>
+        </ProgressBarWrapper>
+        <img
+          src={hospitalImg}
+          alt="병원 아이콘"
+          style={{
+            position: 'absolute',
+            left: '30%',
+            top: '-20px',
+            width: '38px',
+            height: '38px',
+            zIndex: 10,
+          }}
+        />
+        <img
+          src={bedImg}
+          alt="병원 아이콘"
+          style={{
+            position: 'absolute',
+            left: '43%',
+            top: '-20px',
+            width: '38px',
+            height: '38px',
+            zIndex: 10,
+          }}
+        />
+        <img
+          src={wheelChairImg}
+          alt="병원 아이콘"
+          style={{
+            position: 'absolute',
+            left: hospitalPos,
+            top: '-20px',
+            width: '38px',
+            height: '38px',
+            zIndex: 9,
+            transition: 'left 1.5s ease',
+          }}
+        />
+      </div>
       <CustomContainer>
         <ContentWrapper>
           <div

@@ -234,7 +234,7 @@ const ProgressBarWrapper = styled.div`
 `
 
 const ProgressBar = styled.div`
-  width: 60%;
+  width: 100%;
   height: 8px;
   background-color: #e5e7eb;
   border-radius: 4px;
@@ -247,7 +247,7 @@ const ProgressFill = styled.div`
   width: 20%;
   background-color: #3182f6;
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 1.5s ease;
 `
 
 function Upload() {
@@ -265,18 +265,16 @@ function Upload() {
   const [diagnosisId, setDiagnosisId] = useState(null)
   const [receiptId, setReceiptId] = useState(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [hospitalPos, setHospitalPos] = useState('-340px')
+  const [hospitalPos, setHospitalPos] = useState('20%')
+  const [progressWidth, setProgressWidth] = useState('0%')
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setHospitalPos('-200px')
+      setHospitalPos('30%')
+      setProgressWidth('20%')
     }, 100)
     return () => clearTimeout(timer)
   }, [])
-
-  useEffect(() => {
-    console.log('hospitalPos:', hospitalPos)
-  }, [hospitalPos])
 
   const handleDiagnosisUpload = async (event) => {
     const file = event.target.files[0]
@@ -426,14 +424,28 @@ function Upload() {
           marginTop: '48px',
           marginBottom: '2rem',
           display: 'flex',
-          justifyContent: 'flex-end',
+          justifyContent: 'center',
           alignItems: 'center',
         }}
       >
-        <ProgressBarWrapper style={{ flex: 1, maxWidth: '1200px' }}>
-          <div style={{ maxWidth: '1200px', width: '100%' }}>
+        <ProgressBarWrapper
+          style={{
+            width: '100%',
+            maxWidth: '900px',
+            display: 'flex',
+            justifyContent: 'center',
+            margin: '0 auto',
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             <ProgressBar>
-              <ProgressFill />
+              <ProgressFill style={{ width: progressWidth }} />
             </ProgressBar>
           </div>
         </ProgressBarWrapper>
@@ -442,13 +454,12 @@ function Upload() {
           alt="병원 아이콘"
           style={{
             position: 'absolute',
-            left: '50%',
-            transform: `translateX(calc(-50% + ${hospitalPos}))`,
+            left: hospitalPos,
             top: '-20px',
             width: '38px',
             height: '38px',
             zIndex: 10,
-            transition: 'transform 0.8s cubic-bezier(0.4,0,0.2,1)',
+            transition: 'left 1.5s ease',
           }}
         />
       </div>

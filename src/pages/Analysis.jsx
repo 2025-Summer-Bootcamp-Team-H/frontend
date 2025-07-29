@@ -7,20 +7,32 @@ import { useState, useEffect } from 'react'
 import { forgeryAPI } from '../services'
 import Check from '../assets/Analysis/Check.png'
 import Reject from '../assets/Analysis/Reject.png'
+import bedImg from '../assets/Upload/bed.png'
+import hospitalImg from '../assets/Upload/hospital.png'
 
 const ProgressBarWrapper = styled.div`
   width: 100%;
-  height: 7px;
-  background: #f2f4f6;
-  overflow: hidden;
-  margin-bottom: 2.5vh;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 0;
 `
 
-const Progress = styled.div`
-  width: 40%;
+const ProgressBar = styled.div`
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+`
+
+const ProgressFill = styled.div`
   height: 100%;
-  background: #3182f6;
-  transition: width 0.3s;
+  width: 40%;
+  background-color: #3182f6;
+  border-radius: 4px;
+  transition: width 1.5s ease;
 `
 const Title = styled.h1`
   font-size: 1.8vw;
@@ -50,8 +62,7 @@ const ContentWrapper = styled.div`
   align-items: flex-start;
 `
 const CustomContainer = styled(Container)`
-  margin: 2vh auto;
-  margin-top: 7vh;
+  margin-top: 48px;
 `
 
 const OverlayIcon = styled.img`
@@ -85,6 +96,16 @@ function Analysis() {
   const [receiptImageUrl, setReceiptImageUrl] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [hospitalPos, setHospitalPos] = useState('30%')
+  const [progressWidth, setProgressWidth] = useState('20%')
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHospitalPos('42%')
+      setProgressWidth('40%')
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const fetchAnalysisResult = async () => {
@@ -177,9 +198,56 @@ function Analysis() {
   return (
     <div>
       <Navbar />
-      <ProgressBarWrapper>
-        <Progress />
-      </ProgressBarWrapper>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          marginTop: '48px',
+          marginBottom: '2rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ProgressBarWrapper
+          style={{
+            width: '100%',
+            maxWidth: '900px',
+            display: 'flex',
+            justifyContent: 'center',
+            margin: '0 auto',
+          }}
+        >
+          <ProgressBar>
+            <ProgressFill style={{ width: progressWidth }} />
+          </ProgressBar>
+        </ProgressBarWrapper>
+        <img
+          src={hospitalImg}
+          alt="병원 아이콘"
+          style={{
+            position: 'absolute',
+            left: '30%',
+            top: '-20px',
+            width: '38px',
+            height: '38px',
+            zIndex: 10,
+          }}
+        />
+        <img
+          src={bedImg}
+          alt="병원 아이콘"
+          style={{
+            position: 'absolute',
+            left: hospitalPos,
+            top: '-20px',
+            width: '38px',
+            height: '38px',
+            zIndex: 9,
+            transition: 'left 1.5s ease',
+          }}
+        />
+      </div>
       <CustomContainer>
         <ContentWrapper>
           <Title>진단서 및 영수증 위조 분석</Title>
