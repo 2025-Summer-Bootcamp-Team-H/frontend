@@ -36,12 +36,78 @@ const ProgressFill = styled.div`
   border-radius: clamp(3px, 0.75vw, 4px);
   transition: width 1.5s ease;
 `
+
+const StepLoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+`
+
+const StepLoadingContainer = styled.div`
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  text-align: center;
+`
+
+const StepTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  font-family: 'Public Sans';
+  text-align: center;
+`
+
+const StepList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  width: 100%;
+`
+
+const StepItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+  opacity: ${(props) => (props.completed ? 1 : 0.5)};
+  transition: opacity 0.3s ease;
+  width: 100%;
+`
+
+const CheckIcon = styled.div`
+  color: #10b981;
+  font-size: 1.5rem;
+  font-weight: bold;
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  transition: opacity 0.3s ease;
+`
+
 const SubTitle = styled.h2`
   font-size: 1.3vw;
   font-weight: bold;
   font-family: 'Public Sans';
   margin-bottom: 1.5vh;
 `
+
 const ImageBox = styled.div`
   width: 28vw;
   height: 50vh;
@@ -75,6 +141,7 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `
+
 const CustomContainer = styled(Container)`
   margin-top: 48px;
 `
@@ -111,6 +178,14 @@ function ReceiptEdit() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [hospitalPos, setHospitalPos] = useState('55%')
   const [progressWidth, setProgressWidth] = useState('60%')
+  const [stepLoading, setStepLoading] = useState(false)
+  const [completedSteps, setCompletedSteps] = useState([])
+
+  const steps = [
+    '특약 조건 자동 분석 완료',
+    '보험금 자동 계산 중...',
+    '최종 승인 완료',
+  ]
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -234,12 +309,16 @@ function ReceiptEdit() {
       return
     }
 
-    setLoading(true)
-    try {
-      // 1. 영수증 정보 수정 API 호출
-      await receiptAPI.updateReceipt(receiptId, receiptData)
+    setStepLoading(true)
+    setCompletedSteps([])
 
-      // 2. 보험금 청구 생성 API 호출
+    try {
+      // 1단계: 영수증 정보 수정
+      await receiptAPI.updateReceipt(receiptId, receiptData)
+      setCompletedSteps([steps[0]])
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      // 2단계: 보험금 청구 생성
       const diagnosisId = location.state?.diagnosisId
       if (!diagnosisId) {
         alert('진단서 ID를 찾을 수 없습니다.')
@@ -247,14 +326,19 @@ function ReceiptEdit() {
       }
 
       await claimsAPI.create(diagnosisId, receiptId)
+      setCompletedSteps([steps[0], steps[1]])
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // 3. 완료 페이지로 이동
+      // 3단계: 완료
+      setCompletedSteps([steps[0], steps[1], steps[2]])
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+
+      // 완료 페이지로 이동
       navigate('/complete')
     } catch (error) {
       console.error('청구 생성 실패:', error)
       alert('청구 생성에 실패했습니다.')
-    } finally {
-      setLoading(false)
+      setStepLoading(false)
     }
   }
 
@@ -280,6 +364,29 @@ function ReceiptEdit() {
     const yPercent = (y / rect.height) * 100
 
     setMousePosition({ x: xPercent, y: yPercent })
+  }
+
+  if (stepLoading) {
+    return (
+      <div>
+        <Navbar />
+        <StepLoadingOverlay>
+          <StepLoadingContainer>
+            <StepTitle>AI Agent 실행 중...</StepTitle>
+            <StepList>
+              {steps.map((step, index) => (
+                <StepItem key={index} completed={completedSteps.includes(step)}>
+                  <CheckIcon visible={completedSteps.includes(step)}>
+                    ✓
+                  </CheckIcon>
+                  <span>{step}</span>
+                </StepItem>
+              ))}
+            </StepList>
+          </StepLoadingContainer>
+        </StepLoadingOverlay>
+      </div>
+    )
   }
 
   if (loading && !receiptImage) {
